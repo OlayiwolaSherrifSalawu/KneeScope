@@ -18,7 +18,13 @@ function byStatus(p: PredictionResponse, status: FindingResult['status'], id?: s
 function renderRow(f: FindingResult, source: PredictionResponse['provenance']['source'] | null) {
   return render(
     <ul>
-      <FindingRow finding={f} source={source} onRevealLabel={() => {}} onRetry={() => {}} />
+      <FindingRow
+        finding={f}
+        source={source}
+        onToggleLabel={() => {}}
+        onRetryLabel={() => {}}
+        onRetry={() => {}}
+      />
     </ul>,
   );
 }
