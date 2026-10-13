@@ -43,7 +43,7 @@ dev-mode-dirs = ["contracts", "ml", "api"]
 [tool.ruff]
 line-length = 110
 target-version = "py312"
-extend-exclude = ["web", "artifacts", "data"]
+extend-exclude = ["web", "artifacts", "data", ".claude"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
@@ -71,3 +71,14 @@ ignore_missing_imports = true
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
+
+# CPU-only PyTorch wheels for local work and serving (no GPU assumed, decisions D-010).
+# Training on a hosted GPU uses that platform's own torch build.
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+torchvision = { index = "pytorch-cpu" }
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
