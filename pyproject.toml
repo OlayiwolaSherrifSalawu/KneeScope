@@ -19,7 +19,10 @@ ml = [
   "torchvision>=0.18",
   "pydicom>=2.4",
   "scikit-learn>=1.5",
+  "pandas>=2.2", # dataset CSVs (train.csv, train_series.csv) in audits and label building
 ]
+# For `pip install -e ".[dev]"` users (the Makefile uses uv); same tools as [dependency-groups].dev.
+dev = ["pytest>=8.2", "httpx>=0.27", "ruff>=0.6", "mypy>=1.11", "jsonschema>=4.23", "pre-commit>=3.7"]
 
 [dependency-groups]
 dev = [
@@ -28,6 +31,7 @@ dev = [
   "ruff>=0.6",
   "mypy>=1.11",
   "jsonschema>=4.23",
+  "pre-commit>=3.7",
 ]
 
 [build-system]
@@ -70,4 +74,4 @@ ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "-q"
+addopts = "-q --import-mode=importlib"

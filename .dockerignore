@@ -1,0 +1,10 @@
+.git
+.venv
+.claude
+web/node_modules
+web/dist
+data
+artifacts
+**/__pycache__
+*.pdf
+*.png

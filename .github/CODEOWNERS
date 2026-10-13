@@ -1,0 +1,48 @@
+# Code owners for the canonical KneeScope layout (docs/decisions.md D-012).
+# Same people and areas as the original scaffold, remapped from src/ to api/, ml/ and
+# contracts/. Owners review changes to their paths; the last matching rule wins.
+
+# Coordination: backlog, collaboration rules, decisions
+/AGENTS.md                              @anasabubakar @JesuYiwola
+/docs/decisions.md                      @anasabubakar @JesuYiwola
+/docs/issues/                           @anasabubakar @JesuYiwola
+/docs/issue-index.md                    @anasabubakar @JesuYiwola
+
+# Data and preprocessing (was src/kneeml/data/)
+/ml/kneescope_ml/adapters/              @JesuYiwola
+/ml/kneescope_ml/preprocess.py          @JesuYiwola
+/ml/kneescope_ml/render.py              @JesuYiwola
+/ml/kneescope_ml/labels.py              @JesuYiwola
+/config/preprocessing.toml              @JesuYiwola
+/docs/data-audit.md                     @JesuYiwola
+
+# Models (was src/kneeml/models/)
+/ml/kneescope_ml/model.py               @DaviStyle
+
+# Training (was src/kneeml/training/)
+/ml/kneescope_ml/train.py               @anasabubakar
+/scripts/train.py                       @anasabubakar
+/config/train.toml                      @anasabubakar
+/docs/experiments.md                    @anasabubakar
+
+# Evaluation (was src/kneeml/eval/)
+/ml/kneescope_ml/evaluation.py          @mfon9
+/docs/model-card.md                     @mfon9
+
+# Inference and explanations (was src/kneeml/inference/)
+/ml/kneescope_ml/inference.py           @mfon9 @JesuYiwola
+/ml/kneescope_ml/explain.py             @mfon9 @JesuYiwola
+/config/model.toml                      @mfon9 @JesuYiwola
+
+# Backend (was src/knee_api/)
+/api/                                   @Ijhay-stars
+/docker/                                @Ijhay-stars
+/docker-compose.yml                     @Ijhay-stars
+
+# Frontend and design
+/web/                                   @okeowovictor
+/DESIGN.md                              @okeowovictor
+/docs/design/                           @okeowovictor
+
+# Shared contracts (was docs/contracts/) — every producer and consumer reviews
+/contracts/                             @okeowovictor @Ijhay-stars @mfon9 @JesuYiwola @DaviStyle @anasabubakar
