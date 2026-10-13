@@ -461,6 +461,7 @@ table.studies a {
   min-width: 0;
   min-height: 0;
   background: var(--ks-lb-bg);
+  position: relative;
 }
 .stage-head {
   display: flex;
@@ -499,7 +500,7 @@ table.studies a {
   background: var(--ks-lb-raised);
   border-bottom-color: var(--ks-lb-accent);
 }
-.tabs button:disabled {
+.tabs button[aria-disabled='true'] {
   color: var(--ks-lb-text-faint);
   cursor: not-allowed;
   border-bottom: 2px dashed var(--ks-lb-line-strong);
@@ -528,12 +529,25 @@ table.studies a {
   background: var(--ks-hatch);
   z-index: 2;
 }
+.viewer {
+  touch-action: none;
+}
+.viewer.zoomed {
+  cursor: grab;
+}
+.viewer.dragging {
+  cursor: grabbing;
+}
 .viewer canvas {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+/* Nearest-neighbour only above 200% (DESIGN.md section 14); no transition on the image. */
+.viewer canvas.pixelated {
+  image-rendering: pixelated;
 }
 .viewer .corner {
   position: absolute;
@@ -578,6 +592,85 @@ table.studies a {
   gap: var(--ks-space-2);
   padding: var(--ks-space-2) var(--ks-space-4) var(--ks-space-3);
   flex-wrap: wrap;
+}
+.controls-sep {
+  width: 1px;
+  align-self: stretch;
+  margin: 4px var(--ks-space-1);
+  background: var(--ks-lb-line);
+}
+.adjust {
+  position: relative;
+}
+.popover {
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 0;
+  z-index: 5;
+  width: 260px;
+  display: grid;
+  gap: var(--ks-space-2);
+  padding: var(--ks-space-3);
+  background: var(--ks-lb-raised);
+  border: 1px solid var(--ks-lb-line-strong);
+  border-radius: var(--ks-radius-panel);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+  font-size: 12px;
+}
+.popover p {
+  margin: 0;
+}
+.popover label {
+  display: grid;
+  grid-template-columns: 70px 1fr 44px;
+  align-items: center;
+  gap: var(--ks-space-2);
+}
+.sheet {
+  position: absolute;
+  top: 56px;
+  right: var(--ks-space-4);
+  z-index: 6;
+  width: min(420px, calc(100% - 2 * var(--ks-space-4)));
+  padding: var(--ks-space-4);
+  background: var(--ks-lb-raised);
+  border: 1px solid var(--ks-lb-line-strong);
+  border-radius: var(--ks-radius-panel);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+  font-size: 13px;
+}
+.sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sheet h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+.sheet table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--ks-space-3) 0;
+}
+.sheet th,
+.sheet td {
+  padding: 4px 0;
+  text-align: left;
+  font-weight: 400;
+  vertical-align: top;
+}
+.sheet th {
+  white-space: nowrap;
+  padding-right: var(--ks-space-3);
+}
+.sheet th kbd + kbd {
+  margin-left: 4px;
+}
+.sheet p {
+  margin: 0;
+  font-size: 12px;
 }
 input[type='range'] {
   flex: 1;
@@ -907,6 +1000,14 @@ table.metrics td.undef {
   }
   .browser {
     padding: var(--ks-space-4);
+  }
+}
+
+/* Below 600px the shortcut sheet is hidden (DESIGN.md section 15). */
+@media (max-width: 599px) {
+  .sheet,
+  .shortcuts-btn {
+    display: none;
   }
 }
 
