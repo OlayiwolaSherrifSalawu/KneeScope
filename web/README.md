@@ -49,8 +49,8 @@ Fonts are bundled through `@fontsource` (no CDN requests).
 
 ```
 src/api/         client.ts (typed fetch, ApiRequestError), schema.d.ts (generated), types.ts
-src/components/  AppShell, FindingRow, ProvenanceStrip, SliceViewer, MetricsLedger, ...
+src/components/  AppShell, FindingRow, ProvenanceStrip, MetricsLedger, ...; viewer/ (ViewerPanel, SliceCanvas, PlaneTabs, ...)
 src/pages/       StudiesPage, ReviewPage, EvaluationPage
-src/hooks/       useAsync
+src/hooks/       useAsync, useKeyboardShortcuts
 src/styles/      tokens.css, index.css
 ```
