@@ -51,23 +51,45 @@ gateway, Redis, or a database without an identified need; assumed paid GPU hosti
 
 If two documents disagree, follow the higher one and open a PR fixing the lower one.
 
+## 2a. Canonical layout (everyone uses this — D-012)
+
+| Put… | …here | Never here |
+|---|---|---|
+| Backend routes, settings, errors | `api/kneescope_api/` | `src/`, any second FastAPI app |
+| Data adapters, preprocessing, rendering, model, training, evaluation, explanations | `ml/kneescope_ml/` | `src/kneeml/`, notebooks as source of truth |
+| The one preprocessing function | `ml/kneescope_ml/preprocess.py` | anywhere else |
+| Shared formats (findings, predictions, metrics, errors…) | `contracts/` | `docs/contracts/` |
+| Configs and versions | `config/*.toml` | `configs/` |
+| Tests | `tests/` (`tests/api`, `tests/ml`, …) | next to source |
+| Frontend | `web/` | — |
+| Decisions | `docs/decisions.md` | `docs/adr/` |
+| Data, checkpoints, caches, runs | `data/`, `artifacts/` (git-ignored) | `models/`, anywhere tracked |
+
+`scripts/check_layout.py` enforces this in CI and pre-commit. Run `make help` for the
+common commands (setup, api, web, dev, test, lint, contracts, verify, up).
+
 ## 3. Workstreams and ownership
 
 Roles are responsibilities, not headcount. A small team merges roles (e.g. Data +
-Labels, Modelling + Evaluation, Backend + Frontend). Named owners are agreed in
-`KS-SCOPE-02`; until then every row is **unassigned** and nobody inherits it by default.
+Labels, Modelling + Evaluation, Backend + Frontend). Owners below come from
+`.github/CODEOWNERS`; nobody inherits an unassigned row by default.
 
-| Workstream | Role | Owns (paths) | Owner | Reviewer |
-|---|---|---|---|---|
-| coordination | Coordinator/integrator | `docs/decisions.md`, `docs/issue-index.md`, `docs/issues/`, `README.md`, release | unassigned | unassigned |
-| frontend | Design/frontend | `web/`, `DESIGN.md`, `docs/design/` | unassigned | unassigned |
-| data | Data/preprocessing | `ml/kneescope_ml/adapters/`, `preprocess.py`, `render.py`, `config/preprocessing.toml`, `docs/data-audit.md` | unassigned | unassigned |
-| modelling | Modelling | `ml/kneescope_ml/model.py`, `train.py`, `inference.py`, `config/model.toml`, `config/train.toml`, `docs/experiments.md` | unassigned | unassigned |
-| labels | Labels/explainability | `ml/kneescope_ml/labels.py`, `explain.py`, `report_labels.py` | unassigned | unassigned |
-| evaluation | Evaluation | `ml/kneescope_ml/evaluation.py`, `docs/model-card.md`, `docs/error-analysis.md`, metrics artifacts | unassigned | unassigned |
-| backend | Backend/serving | `api/`, `.env.example`, container files | unassigned | unassigned |
-| qa | Independent reviewer/QA | `tests/e2e/`, `docs/completion-review.md`, CI | unassigned | — |
-| shared | Contract owners (all producers) | `contracts/` — changes follow §8 | — | consumers |
+| Workstream | Role | Owns (paths) | Owner (from CODEOWNERS) |
+|---|---|---|---|
+| coordination | Coordinator/integrator | `AGENTS.md`, `docs/decisions.md`, `docs/issues/`, `docs/issue-index.md` | @anasabubakar, @JesuYiwola |
+| data | Data/preprocessing (+ labels files) | `ml/kneescope_ml/adapters/`, `preprocess.py`, `render.py`, `labels.py`, `config/preprocessing.toml`, `docs/data-audit.md` | @JesuYiwola |
+| modelling: models | Modelling | `ml/kneescope_ml/model.py` | @DaviStyle |
+| modelling: training | Modelling | `ml/kneescope_ml/train.py`, `scripts/train.py`, `config/train.toml`, `docs/experiments.md` | @anasabubakar |
+| evaluation | Evaluation | `ml/kneescope_ml/evaluation.py`, `docs/model-card.md` | @mfon9 |
+| inference + explainability | Labels/explainability, serving model side | `ml/kneescope_ml/inference.py`, `explain.py`, `config/model.toml` | @mfon9, @JesuYiwola |
+| backend | Backend/serving | `api/`, `docker/`, `docker-compose.yml` | @Ijhay-stars |
+| frontend | Design/frontend | `web/`, `DESIGN.md`, `docs/design/` | @okeowovictor |
+| shared | Contract owners | `contracts/` — changes follow §8 | all six |
+| qa | Independent reviewer/QA | `tests/e2e/`, `docs/completion-review.md`, CI | unassigned — rotate: reviewer must come from a different row |
+
+`.github/CODEOWNERS` is the source of truth for this table; change both together. Owners
+were carried over from the original scaffold's CODEOWNERS (D-012); each person confirms
+their row under `KS-SCOPE-02`. Reviewer for a PR = someone from a different row.
 
 "Integration ownership" means merging and verifying; it does **not** mean finishing other
 workstreams' unfinished work.
@@ -147,6 +169,7 @@ Run what applies before opening a PR, and paste results in the PR:
 | Web | `pnpm --dir web lint && pnpm --dir web typecheck && pnpm --dir web test && pnpm --dir web build` |
 | Design tokens | `python3 scripts/check_design_tokens.py` |
 | Backlog graph | `python3 scripts/backlog.py check` |
+| Canonical layout | `python3 scripts/check_layout.py` |
 | Docs links/placeholders | `python3 scripts/check_docs.py` |
 
 UI changes: before/after screenshots at desktop and 375px. Scientific changes: the run
