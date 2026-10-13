@@ -57,6 +57,15 @@ mypy, pytest, contract drift check, and web lint/typecheck/format/test/build. CI
 | [`docs/issue-index.md`](docs/issue-index.md) | Backlog overview, first ready issues, critical path |
 | [`docs/model-card.md`](docs/model-card.md), [`docs/data-audit.md`](docs/data-audit.md) | Templates to fill from evidence |
 
+## One layout
+
+The team's original scaffold (`src/knee_api`, `src/kneeml`, `docs/contracts/`, `configs/`)
+was merged and then consolidated into this layout (`docs/decisions.md` D-011, D-012).
+Its useful parts were carried over: CODEOWNERS (remapped to the new paths), `/readyz`,
+client `X-Request-ID` support, the Makefile, Docker setup and pre-commit hooks.
+`scripts/check_layout.py` keeps the retired paths from coming back. Common commands:
+`make help`.
+
 ## Run modes
 
 | Mode | How | Results |
