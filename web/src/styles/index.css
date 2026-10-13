@@ -832,6 +832,36 @@ table.metrics th {
   border-top: 1px solid var(--ks-lg-ink);
   border-bottom: 1px solid var(--ks-lg-line);
 }
+table.metrics tbody th {
+  font: 500 13px var(--ks-font-sans);
+  letter-spacing: 0;
+  text-transform: none;
+  border-top: 0;
+  border-bottom: 1px solid var(--ks-lg-line);
+  color: var(--ks-lg-ink);
+  height: 40px;
+}
+table.metrics .metric-value {
+  color: var(--ks-lg-ink);
+}
+table.metrics .metric-note {
+  display: block;
+  font: 400 11px/1.3 var(--ks-font-sans);
+  color: var(--ks-lg-ink-muted);
+}
+table.metrics td.undef .metric-note {
+  color: var(--ks-lg-ink-muted);
+}
+.ledger-table-wrap {
+  border-right: 1px solid var(--ks-lg-line);
+}
+.ledger-table-wrap:focus-visible {
+  outline: 2px solid var(--ks-lg-accent);
+  outline-offset: 2px;
+}
+.macro-auc {
+  margin-top: var(--ks-space-3);
+}
 table.metrics th:first-child,
 table.metrics td:first-child {
   text-align: left;
