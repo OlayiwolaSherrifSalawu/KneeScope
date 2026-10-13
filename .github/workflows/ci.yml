@@ -28,6 +28,7 @@ jobs:
       - name: Restricted assets, design tokens, backlog graph, docs
         run: |
           python3 scripts/check_restricted_assets.py
+          python3 scripts/check_layout.py
           python3 scripts/check_design_tokens.py
           python3 scripts/backlog.py check
           python3 scripts/check_docs.py

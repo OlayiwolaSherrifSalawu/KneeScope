@@ -120,3 +120,11 @@ def test_labels_are_separate_and_fixture_marked():
 def test_metrics_never_fabricated_in_fixture_mode():
     body = client.get("/metrics").json()
     assert body["status"] == "unavailable" and body["per_finding"] == []
+
+
+def test_readyz_and_client_request_id():
+    resp = client.get("/readyz", headers={"X-Request-ID": "client-123"})
+    assert resp.status_code == 200 and resp.json()["mode"] == "fixture"
+    assert resp.headers["x-request-id"] == "client-123"
+    bad = client.get("/healthz", headers={"X-Request-ID": "bad id with spaces"})
+    assert bad.headers["x-request-id"].startswith("req-")

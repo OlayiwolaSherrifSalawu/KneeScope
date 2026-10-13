@@ -1910,6 +1910,28 @@
         ]
       }
     },
+    "/readyz": {
+      "get": {
+        "description": "Ready to serve: fixture data loads (model mode adds checkpoint checks, KS-API-02).",
+        "operationId": "readyz_readyz_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Readyz",
+        "tags": [
+          "service"
+        ]
+      }
+    },
     "/studies": {
       "get": {
         "operationId": "studies_studies_get",
