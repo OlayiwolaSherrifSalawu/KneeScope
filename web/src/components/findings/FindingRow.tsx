@@ -1,5 +1,5 @@
-import type { DatasetLabel, FindingResult, ResultSource } from '../api/types';
-import { StateGlyph } from './StateGlyph';
+import type { DatasetLabel, FindingResult, ResultSource } from '../../api/types';
+import { StateGlyph } from '../StateGlyph';
 
 export type LabelReveal =
   | { phase: 'loading' }

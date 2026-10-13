@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import type { FindingResult, PredictionResponse } from '../api/types';
-import { FindingRow } from '../components/FindingRow';
-import { ProvenanceStrip } from '../components/ProvenanceStrip';
+import { FindingRow } from '../components/findings/FindingRow';
+import { ProvenanceStrip } from '../components/findings/ProvenanceStrip';
 import { example } from './examples';
 
 const fixture = example<PredictionResponse>('prediction-fixture').body;

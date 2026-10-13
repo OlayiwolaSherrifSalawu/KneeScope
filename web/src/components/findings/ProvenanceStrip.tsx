@@ -1,5 +1,5 @@
-import type { PredictionResponse } from '../api/types';
-import { HatchBlock } from './StateGlyph';
+import type { PredictionResponse } from '../../api/types';
+import { HatchBlock } from '../StateGlyph';
 import { Clock } from 'lucide-react';
 
 function SourceBadge({ p }: { p: PredictionResponse }) {

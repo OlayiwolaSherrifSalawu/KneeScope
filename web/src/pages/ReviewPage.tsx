@@ -9,8 +9,8 @@ import {
   type StudyLabels,
 } from '../api/types';
 import { ErrorPanel } from '../components/ErrorPanel';
-import { FindingRow, type LabelReveal } from '../components/FindingRow';
-import { ProvenanceStrip } from '../components/ProvenanceStrip';
+import { FindingRow, type LabelReveal } from '../components/findings/FindingRow';
+import { ProvenanceStrip } from '../components/findings/ProvenanceStrip';
 import { PLANE_LABEL } from '../components/viewer/PlaneTabs';
 import { ViewerPanel } from '../components/viewer/ViewerPanel';
 import { useAsync } from '../hooks/useAsync';
