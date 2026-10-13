@@ -1,16 +1,15 @@
 # Issue index
 
-**Where the issues are:** local backlog in [`docs/issues/`](issues/manifest.md). The
-KneeScope repository has **no GitHub remote**, so nothing has been published and no
-GitHub URLs exist yet. Publishing is idempotent and requires coordinator approval:
+**Where the issues are:** published on GitHub at
+https://github.com/OlayiwolaSherrifSalawu/KneeScope/issues (70 issues: 9 epics with
+native sub-issues, 61 actionable issues with native "blocked by" links and `Blocked by`
+lines in each body). `docs/issues/published.json` maps every `KS-` ID to its issue number.
+Re-publishing is idempotent (existing issues are matched by ID and updated):
 
 ```bash
 python scripts/backlog.py render
-python scripts/publish_issues.py --repo OWNER/NAME --dry-run
+python scripts/publish_issues.py --repo OlayiwolaSherrifSalawu/KneeScope --dry-run
 ```
-
-After publishing, `docs/issues/published.json` maps each `KS-` ID to its issue number;
-update the tables below with the links.
 
 - Source of truth: `docs/issues/src/*.toml` (edit these).
 - Generated: one body per issue `docs/issues/KS-*.md`, [`manifest.md`](issues/manifest.md),
