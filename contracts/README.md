@@ -20,6 +20,18 @@ parallel. Changing anything here follows the contract-change procedure in
 CI fails if generated files are stale (`scripts/export_contracts.py --check`,
 `pnpm --dir web gen:api:check`).
 
+### Where the former `docs/contracts/01–07` templates went
+
+| Former template | Now |
+|---|---|
+| 01 finding list | `findings.json` + §1 |
+| 02 labels file | `StudyLabels`/`DatasetLabel` + §8; file format in KS-LABEL-01 |
+| 03 folds file | split script + hash, KS-DATA-08 (§9 partition values) |
+| 04 preprocessed exam | §4 (`preprocess_study`, `PlaneTensor`) |
+| 05 model I/O | §5 (`ModelOutput`) |
+| 06 metrics JSON | `MetricsSnapshot` + §9 |
+| 07 OpenAPI | `openapi.json` (generated) + `web/src/api/schema.d.ts` |
+
 ---
 
 ## 1. Findings and profiles
