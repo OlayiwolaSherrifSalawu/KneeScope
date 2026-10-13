@@ -4,6 +4,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 step() { printf '\n== %s\n' "$*"; }
 
+step "restricted assets"; python3 scripts/check_restricted_assets.py
 step "design tokens";      python3 scripts/check_design_tokens.py
 step "backlog graph";      python3 scripts/backlog.py check
 step "docs links";         python3 scripts/check_docs.py
