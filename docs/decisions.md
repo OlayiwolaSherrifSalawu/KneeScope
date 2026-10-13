@@ -67,6 +67,46 @@ entries may supersede earlier ones explicitly. Decisions still open are listed a
   libraries, which is impractical for local setup, CI and the container.
 - **Consequences:** `uv sync --extra ml` works on any CPU machine; the `ml` CI job runs the
   training smoke tests.
+## D-011 — 2026-10-13 — Merge the original main scaffold without removing it
+- **Decision:** `main` (the team's original scaffold: `src/knee_api`, `src/kneeml`,
+  `docs/contracts/01–07`, Docker, Makefile, pre-commit, CODEOWNERS) was merged into
+  `anasabubakar/kneescope-foundation` with both histories kept and nothing deleted, so the
+  foundation can be proposed to `main` as a PR. Authorised by Anas Abubakar.
+- **Conflicts resolved:** `.gitignore` and `.env.example` are unions; README keeps the
+  KneeScope text and describes both scaffolds; `pyproject.toml` packages both layouts,
+  adds the original dependencies (`pydantic-settings`; `SimpleITK`, `pandas`, `pyyaml` in
+  the `ml` extra) and a `dev` extra so `pip install -e ".[dev]"` in the Makefile still works;
+  `ci.yml` is the KneeScope workflow (it also runs the original tests); `web.yml` reads the
+  pnpm version from `web/package.json` instead of pinning pnpm 9. The original lint
+  settings stay in force for the original code via `ruff.toml` files in `src/`,
+  `tests/knee_api/` and `tests/kneeml/`. `data/` and `artifacts/` ignores are now
+  root-anchored so `src/kneeml/data/` is not ignored.
+- **Open:** `.github/CODEOWNERS` assigns data → JesuYiwola, models → DaviStyle, training →
+  anasabubakar, eval → mfon9, inference → mfon9 + JesuYiwola, API → Ijhay-stars, web →
+  okeowovictor. The two layouts overlap (two APIs, two ML packages, two contract
+  folders). The owners should choose one layout per area and retire the other; record it
+  here. This also feeds KS-SCOPE-02.
+
+## D-012 — 2026-10-13 — One canonical layout for everyone
+- **Decision:** The KneeScope layout is canonical: `api/` (backend), `ml/` (data,
+  preprocessing, model, training, evaluation, inference), `contracts/` (shared formats),
+  `config/` (TOML configs), `tests/`, `web/`, `docs/decisions.md`. The original scaffold's
+  `src/knee_api`, `src/kneeml`, `docs/contracts/`, `configs/`, `docs/adr/`, `models/`,
+  `scaffold.sh` and duplicate `web.yml` are retired (recoverable from git history).
+  Decided by Anas Abubakar on the team's behalf.
+- **Why:** Two APIs, two ML packages and two contract folders cannot coexist: the plan
+  requires one shared preprocessing implementation and one API the web app talks to. The
+  KneeScope side holds the filled-in contracts and tested code; the original side was stubs
+  (placeholder hash-based scores, a one-line z-score, empty contract templates).
+- **Carried over:** CODEOWNERS (same people, remapped paths), `/readyz`, honouring a
+  client `X-Request-ID`, Makefile targets, Docker + compose (now localhost-only, mounting
+  `artifacts/`), pre-commit hooks (ruff now runs from the locked env). Baseline hints from
+  `configs/baseline.yaml` for KS-MODEL-03 to evaluate: seed 42, subset 800 studies,
+  224 px input, `efficientnet_b0` backbone, 10 epochs, batch 16, lr 3e-4.
+- **Enforcement:** `scripts/check_layout.py` (CI + pre-commit) fails on retired paths, a
+  preprocessing function outside `ml/kneescope_ml/preprocess.py`, or a FastAPI app
+  outside `api/`. AGENTS.md §2a lists where everything goes.
+- **Supersedes:** the "Open" part of D-011.
 
 ## Open decisions
 

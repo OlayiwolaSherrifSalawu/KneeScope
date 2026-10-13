@@ -102,6 +102,13 @@ def create_app() -> FastAPI:
             finding_profile=settings.finding_profile,
         )
 
+    @app.get("/readyz", response_model=Health, tags=["service"])
+    def readyz() -> Health:
+        """Ready to serve: fixture data loads (model mode adds checkpoint checks, KS-API-02)."""
+        if settings.mode == "fixture":
+            get_store().studies  # noqa: B018 - raises if fixtures are missing or invalid
+        return healthz()
+
     @app.get("/findings", response_model=FindingProfile, tags=["findings"])
     def findings() -> FindingProfile:
         return load_profile(settings.finding_profile)

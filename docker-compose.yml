@@ -1,0 +1,12 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+    ports:
+      - "127.0.0.1:8000:8000" # localhost only: no authentication, see docs/security.md
+    env_file:
+      - path: .env
+        required: false
+    volumes:
+      - ./artifacts:/app/artifacts:ro # checkpoints, caches, manifests (git-ignored)

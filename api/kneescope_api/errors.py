@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import re
 import uuid
 
 from fastapi import FastAPI, Request
@@ -48,7 +49,10 @@ def _body(
 def install_error_handlers(app: FastAPI) -> None:
     @app.middleware("http")
     async def _request_id(request: Request, call_next):  # type: ignore[no-untyped-def]
-        request.state.request_id = f"req-{uuid.uuid4().hex[:12]}"
+        # Honour a well-formed client ID (carried over from the original knee_api scaffold).
+        incoming = request.headers.get("x-request-id", "")
+        valid = re.fullmatch(r"[A-Za-z0-9._-]{1,64}", incoming)
+        request.state.request_id = incoming if valid else f"req-{uuid.uuid4().hex[:12]}"
         response = await call_next(request)
         response.headers["X-Request-ID"] = request.state.request_id
         return response
