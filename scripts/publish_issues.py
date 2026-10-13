@@ -154,6 +154,11 @@ def main() -> int:
             label_args = [x for lbl in it["labels"] for x in ("--label", lbl)]
             if it["id"] in numbers:
                 if pass_no == 2 or it["id"] in existing:
+                    # `gh issue edit` adds labels; drop the opposite status label explicitly.
+                    stale = {"status:ready", "status:blocked"} - set(it["labels"])
+                    label_args = [x for lbl in it["labels"] for x in ("--add-label", lbl)]
+                    if stale and any(lbl.startswith("status:") for lbl in it["labels"]):
+                        label_args += ["--remove-label", stale.pop()]
                     gh(
                         "issue",
                         "edit",
