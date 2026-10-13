@@ -31,6 +31,17 @@ jobs:
           python3 scripts/backlog.py check
           python3 scripts/check_docs.py
 
+  ml:
+    # CPU torch only (see pyproject [tool.uv.sources]); runs the training smoke tests.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+      - run: uv sync --frozen --extra ml
+      - run: uv run pytest tests/ml
+
   web:
     runs-on: ubuntu-latest
     defaults:
