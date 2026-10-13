@@ -93,10 +93,10 @@ export function FindingRow({
           {scored ? (
             <>
               <div className="bar" aria-hidden="true">
-                <i style={{ width: `${(f.score ?? 0) * 100}%` }} />
+                <i style={{ width: `${Math.round((f.score ?? 0) * 100)}%` }} />
                 {f.threshold != null ? <b style={{ left: `${f.threshold * 100}%` }} /> : null}
               </div>
-              {f.threshold != null ? (
+              {f.threshold != null && f.above_threshold != null ? (
                 <span>
                   {f.above_threshold ? 'Above threshold' : 'Below threshold'} (
                   <span className="mono">{formatScore(f.threshold)}</span>)
