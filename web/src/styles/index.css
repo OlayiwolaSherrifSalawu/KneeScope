@@ -964,8 +964,15 @@ table.studies a:focus-visible,
   }
   .topbar {
     flex-wrap: wrap;
-    padding: 8px 16px;
-    gap: 8px 16px;
+    padding: 8px 16px 0;
+    gap: 4px 16px;
+  }
+  /* A wrapped top bar has no fixed height, so the nav needs its own (DESIGN.md §15). */
+  .nav {
+    height: 40px;
+    order: 3;
+    flex-basis: 100%;
+    margin-left: calc(-1 * var(--ks-space-3));
   }
   .footer {
     flex-wrap: wrap;
