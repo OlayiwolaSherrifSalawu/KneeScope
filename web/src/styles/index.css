@@ -1144,3 +1144,99 @@ table.studies a:focus-visible,
 .ledger .btn:hover:not(:disabled) {
   background: var(--ks-lg-paper-2);
 }
+
+/* ---- Finding selection (DESIGN.md section 9.8) ---- */
+button.finding-main {
+  width: 100%;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.finding.selected {
+  background: var(--ks-lb-raised);
+  border-left-color: var(--ks-lb-accent);
+}
+
+/* ---- Explanation panel and overlay (DESIGN.md sections 9.9 and 14) ---- */
+.viewer canvas.attention-overlay {
+  pointer-events: none;
+}
+.explain {
+  padding: var(--ks-space-4);
+  display: grid;
+  gap: var(--ks-space-3);
+  border-top: 1px solid var(--ks-lb-line);
+}
+.explain h3 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+.slice-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.slice-chips .btn {
+  height: 28px;
+  min-width: 32px;
+  padding: 0 10px;
+  font-size: 12px;
+}
+.overlay-controls {
+  display: grid;
+  gap: var(--ks-space-2);
+}
+.overlay-controls .toggle,
+.overlay-controls .opacity {
+  display: flex;
+  align-items: center;
+  gap: var(--ks-space-2);
+  font-size: 13px;
+}
+.overlay-controls input[type='checkbox'] {
+  accent-color: var(--ks-lb-accent);
+  width: 16px;
+  height: 16px;
+}
+.overlay-controls input[type='range'] {
+  accent-color: var(--ks-lb-accent);
+  flex: 1;
+}
+.legend {
+  display: flex;
+  align-items: center;
+  gap: var(--ks-space-2);
+  font-size: 12px;
+  color: var(--ks-lb-text-muted);
+}
+.legend .ramp {
+  display: inline-flex;
+  height: 8px;
+}
+.legend .ramp i {
+  display: block;
+  width: 14px;
+}
+/* Single-hue ochre -> rust ramp, as solid steps (no gradient). */
+.legend .ramp .r1 {
+  background: #c9944a;
+  opacity: 0.6;
+}
+.legend .ramp .r2 {
+  background: #cd7846;
+  opacity: 0.8;
+}
+.legend .ramp .r3 {
+  background: #b2542c;
+}
+.explain .note {
+  margin: 0;
+  font-size: 12px;
+  color: var(--ks-lb-text-muted);
+  border-left: 2px solid var(--ks-lb-line-strong);
+  padding-left: 10px;
+}
