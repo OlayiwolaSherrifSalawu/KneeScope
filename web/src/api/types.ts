@@ -3,6 +3,7 @@ import type { components } from './schema';
 type S = components['schemas'];
 
 export type ApiError = S['ApiError'];
+export type AttentionMap = S['AttentionMap'];
 export type ApiErrorBody = S['ApiErrorBody'];
 export type FindingProfile = S['FindingProfile'];
 export type FindingDefinition = S['FindingDefinition'];
