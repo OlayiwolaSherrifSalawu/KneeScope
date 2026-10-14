@@ -71,7 +71,7 @@ client `X-Request-ID` support, the Makefile, Docker setup and pre-commit hooks.
 | Mode | How | Results |
 |---|---|---|
 | Fixture | `KNEESCOPE_MODE=fixture` (default) | Synthetic studies; `FIXTURE — not a model output` |
-| Model | `KNEESCOPE_MODE=model` | Not implemented yet — returns `503 MODEL_NOT_LOADED` (KS-API-01/02) |
+| Model | `KNEESCOPE_MODE=model` + `KNEESCOPE_MANIFEST` + `KNEESCOPE_DATA_ROOT` | Dataset studies and slices from the manifest; inference still `503 MODEL_NOT_LOADED` (KS-API-02) |
 | Cached | Planned (KS-API-04) | `CACHED` with original timestamp and checkpoint |
 
 Heavy ML dependencies (torch, pydicom, scikit-learn) install with `uv sync --extra ml`.
