@@ -1,10 +1,42 @@
 import { useEffect, useRef, useState, type PointerEvent } from 'react';
 import { diagnoseSliceFailure, sliceUrl, type ApiRequestError } from '../../api/client';
-import type { Plane, SeriesSummary } from '../../api/types';
+import type { AttentionMap, Plane, SeriesSummary } from '../../api/types';
+import { attentionRgba } from '../explanations/alignment';
 import { adjustFilter, type Adjust } from './DisplayAdjust';
 import { SliceImageCache } from './sliceImageCache';
 
 export type Pan = { x: number; y: number };
+
+/** An attention map that already passed the alignment check, and its display opacity. */
+export type OverlayLayer = { map: AttentionMap; opacity: number };
+
+/** Decode a gray8 PNG attention map and paint it with the ochre-to-rust ramp. */
+function paintOverlay(canvas: HTMLCanvasElement, layer: OverlayLayer, onDone: () => void) {
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+  const img = new Image();
+  img.onload = () => {
+    const { width, height } = layer.map;
+    const scratch = document.createElement('canvas');
+    scratch.width = width;
+    scratch.height = height;
+    const sctx = scratch.getContext('2d');
+    if (!sctx) return;
+    sctx.drawImage(img, 0, 0, width, height);
+    const data = sctx.getImageData(0, 0, width, height);
+    for (let i = 0; i < data.data.length; i += 4) {
+      const [r, g, b, a] = attentionRgba((data.data[i] ?? 0) / 255, layer.opacity);
+      data.data[i] = r;
+      data.data[i + 1] = g;
+      data.data[i + 2] = b;
+      data.data[i + 3] = a;
+    }
+    ctx.clearRect(0, 0, width, height);
+    ctx.putImageData(data, 0, 0);
+    onDone();
+  };
+  img.src = `data:image/png;base64,${layer.map.data}`;
+}
 
 /** Above this effective scale (rendered PNG pixels to screen pixels) draw nearest-neighbour. */
 export const NEAREST_NEIGHBOUR_ABOVE = 2;
@@ -20,8 +52,8 @@ function panLimit(image: number, well: number, zoom: number): number {
 
 /**
  * The viewer well: a neutral, near-black frame around a canvas that draws the server-rendered
- * PNG. `sliceIndex` is 0-based (API); annotations show it 1-based. No crosshairs, no overlays,
- * no motion between slices; the previous slice stays until the next one has loaded.
+ * PNG. `sliceIndex` is 0-based (API); annotations show it 1-based. No crosshairs; the only
+ * overlay is an aligned attention map passed in by the caller. No motion between slices; the previous slice stays until the next one has loaded.
  */
 export function SliceCanvas({
   studyId,
@@ -33,6 +65,7 @@ export function SliceCanvas({
   adjust,
   cache,
   fixtureStripe,
+  overlay = null,
   onPan,
 }: {
   studyId: string;
@@ -44,10 +77,14 @@ export function SliceCanvas({
   adjust: Adjust;
   cache: SliceImageCache;
   fixtureStripe: boolean;
+  /** Drawn only when given; the caller has already checked alignment (DESIGN.md section 14). */
+  overlay?: OverlayLayer | null;
   onPan: (next: Pan) => void;
 }) {
   const wellRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const overlayRef = useRef<HTMLCanvasElement>(null);
+  const [overlayDrawn, setOverlayDrawn] = useState<OverlayLayer | null>(null);
   const drag = useRef<{ id: number; x: number; y: number; pan: Pan } | null>(null);
   const [dragging, setDragging] = useState(false);
   const [loaded, setLoaded] = useState<Loaded | null>(null);
@@ -78,6 +115,18 @@ export function SliceCanvas({
       cancelled = true;
     };
   }, [cache, url, width, height, attempt]);
+
+  useEffect(() => {
+    const canvas = overlayRef.current;
+    if (!canvas || !overlay) return;
+    let cancelled = false;
+    paintOverlay(canvas, overlay, () => {
+      if (!cancelled) setOverlayDrawn(overlay);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [overlay]);
 
   useEffect(() => {
     const well = wellRef.current;
@@ -158,6 +207,21 @@ export function SliceCanvas({
           filter: adjustFilter(adjust),
         }}
       />
+      {overlay ? (
+        <canvas
+          ref={overlayRef}
+          className={`attention-overlay${nearest ? ' pixelated' : ''}`}
+          width={overlay.map.width}
+          height={overlay.map.height}
+          aria-hidden="true"
+          data-testid="attention-overlay"
+          data-slice-index={overlay.map.slice_index}
+          style={{
+            visibility: overlayDrawn === overlay && visible ? 'visible' : 'hidden',
+            transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+          }}
+        />
+      ) : null}
       <div className="corner tl">
         {studyId}
         <br />
