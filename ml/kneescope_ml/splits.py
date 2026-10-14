@@ -93,8 +93,7 @@ def make_splits(
         placed_studies[best] += len(members[g])
         placed_pos[best].update(pos)
     check_no_leakage(assignment, groups)
-    return SplitResult(assignment=assignment, split_hash=split_hash(assignment), seed=seed,
-                       grouping=grouping)
+    return SplitResult(assignment=assignment, split_hash=split_hash(assignment), seed=seed, grouping=grouping)
 
 
 def check_no_leakage(assignment: Mapping[str, str], groups: Mapping[str, str]) -> None:
@@ -119,6 +118,10 @@ def partition_counts(
         out[part] = {}
         for f in findings:
             c = Counter(labels.get(s, {}).get(f, "not_labeled") for s in studies)
-            out[part][f] = {"positive": c["positive"], "negative": c["negative"],
-                            "unknown": c["unknown"] + c["not_labeled"], "studies": len(studies)}
+            out[part][f] = {
+                "positive": c["positive"],
+                "negative": c["negative"],
+                "unknown": c["unknown"] + c["not_labeled"],
+                "studies": len(studies),
+            }
     return out
