@@ -46,8 +46,11 @@ def main() -> int:
     studies = adapter.list_studies()
     if args.split_file:
         with args.split_file.open(newline="", encoding="utf-8") as fh:
-            wanted = {r["study_id"] for r in csv.DictReader(fh)
-                      if args.partition is None or r["partition"] == args.partition}
+            wanted = {
+                r["study_id"]
+                for r in csv.DictReader(fh)
+                if args.partition is None or r["partition"] == args.partition
+            }
         studies = [s for s in studies if s in wanted]
     if args.limit is not None:
         studies = studies[: args.limit]
@@ -73,8 +76,10 @@ def main() -> int:
             failed += 1
             print(f"study #{idx}: skipped — {exc}")
     elapsed = max(time.monotonic() - start, 1e-9)
-    print(f"cache {cfg.version}: {built} built, {skipped} already valid, {failed} failed "
-          f"in {elapsed:.1f}s ({built / elapsed:.2f} studies/s) -> {args.out / cfg.version}")
+    print(
+        f"cache {cfg.version}: {built} built, {skipped} already valid, {failed} failed "
+        f"in {elapsed:.1f}s ({built / elapsed:.2f} studies/s) -> {args.out / cfg.version}"
+    )
     return 0
 
 
