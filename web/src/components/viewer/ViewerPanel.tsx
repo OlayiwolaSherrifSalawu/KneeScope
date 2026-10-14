@@ -4,7 +4,8 @@ import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 import { NEUTRAL_ADJUST, type Adjust } from './DisplayAdjust';
 import { PlaneTabs } from './PlaneTabs';
 import { ShortcutSheet } from './ShortcutSheet';
-import { SliceCanvas, type Pan } from './SliceCanvas';
+import type { ViewerPosition } from '../explanations/alignment';
+import { SliceCanvas, type OverlayLayer, type Pan } from './SliceCanvas';
 import { SliceControls } from './SliceControls';
 import { SliceImageCache, neighbourIndices } from './sliceImageCache';
 import { sliceUrl } from '../../api/client';
@@ -13,6 +14,9 @@ import { sliceUrl } from '../../api/client';
 export const ZOOM_STEPS = [1, 1.5, 2, 3, 4, 6, 8] as const;
 
 const middle = (n: number) => Math.floor((n - 1) / 2);
+
+/** A request to show a specific series and slice; `nonce` makes repeated jumps distinct. */
+export type JumpRequest = { seriesId: string; plane: Plane; sliceIndex: number; nonce: number };
 const PAGE = 10;
 
 /**
@@ -23,9 +27,18 @@ const PAGE = 10;
 export function ViewerPanel({
   study,
   fixtureStripe,
+  jump = null,
+  overlay = null,
+  onPosition,
 }: {
   study: StudyDetail;
   fixtureStripe: boolean;
+  /** Jump from the explanation panel (influential slice chips). */
+  jump?: JumpRequest | null;
+  /** Aligned attention map to draw over the displayed slice. */
+  overlay?: OverlayLayer | null;
+  /** Reports the displayed series and slice (for overlay alignment checks). */
+  onPosition?: (position: ViewerPosition | null) => void;
 }) {
   const available = useMemo(
     () => PLANES.filter((p) => study.planes_available.includes(p)),
@@ -56,6 +69,33 @@ export function ViewerPanel({
   const series = seriesForPlane.find((s) => s.series_id === seriesId) ?? seriesForPlane[0] ?? null;
   const count = series?.num_slices ?? 0;
   const zoom = ZOOM_STEPS[zoomStep] ?? 1;
+
+  // Apply a jump request once per nonce.
+  const [appliedJump, setAppliedJump] = useState<number | null>(null);
+  if (jump && jump.nonce !== appliedJump) {
+    const target = study.series.find((s) => s.series_id === jump.seriesId);
+    setAppliedJump(jump.nonce);
+    if (target && available.includes(jump.plane)) {
+      setPlane(jump.plane);
+      setSeriesId(target.series_id);
+      setSlice(Math.min(Math.max(jump.sliceIndex, 0), target.num_slices - 1));
+      setZoomStep(0);
+      setPan({ x: 0, y: 0 });
+    }
+  }
+
+  useEffect(() => {
+    onPosition?.(
+      series
+        ? {
+            seriesId: series.series_id,
+            sliceIndex: slice,
+            renderedWidth: series.rendered_width,
+            renderedHeight: series.rendered_height,
+          }
+        : null,
+    );
+  }, [onPosition, series, slice]);
 
   // Warm the slices around the displayed one (prefetch ±2).
   useEffect(() => {
@@ -159,6 +199,7 @@ export function ViewerPanel({
           adjust={adjust}
           cache={cache}
           fixtureStripe={fixtureStripe}
+          overlay={overlay}
           onPan={setPan}
         />
       ) : (
