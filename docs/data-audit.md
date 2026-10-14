@@ -69,6 +69,7 @@ python scripts/audit_dataset.py --dataset rsna --root data/rsna --out artifacts/
 
 Paste the printed tables into sections 2–4. A second person reruns the command on the same
 subset; the JSON must be identical.
+
 | Item | Value |
 |---|---|
 | Dataset / version / download date | `<…>` |
@@ -80,6 +81,7 @@ subset; the JSON must be identical.
 | Disk size of subset used | `<…>` |
 
 ## 3. Labels (KS-DATA-03, KS-LABEL-01)
+
 | Finding | Positive | Negative | Unknown/missing | Not labelled | Source |
 |---|---|---|---|---|---|
 | `<…>` | | | | | |
@@ -94,6 +96,7 @@ model input; all series stay viewable):
    SeriesInstanceUID (deterministic).
 3. Slices are ordered by ImagePositionPatient along the slice normal; InstanceNumber only
    as a flagged fallback. Images are never mirrored.
+
 | Plane | Studies with ≥1 series | Studies missing | Series selection rule |
 |---|---|---|---|
 | Sagittal | | | `<…>` |
@@ -110,6 +113,7 @@ python scripts/make_splits.py ... --expect-hash <sha256>   # teammate verificati
 Groups are patients (PatientID) when present, otherwise studies. Writes
 `artifacts/splits/*.csv` with salted group hashes (no patient IDs) and prints the counts
 table for this section. `--fractions 0.8,0.2,0` gives a validation-only design.
+
 - Patient identifier available: `<field name or "not available">`
 - Site identifier available: `<…>`
 - Split method, seed, split hash: `<…>`
@@ -128,5 +132,6 @@ python scripts/build_manifest.py --dataset rsna --root data/rsna \
 ```
 
 Evaluation partitions only; includes a missing-plane study when one exists.
+
 Manifest IDs only, partition of each, role (correct / error / limitation), permission
 basis (row in §1).
