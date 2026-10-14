@@ -176,6 +176,20 @@ class RsnaAdapter:
             warnings=tuple(warnings),
         )
 
+    def patient_id(self, study_id: str) -> str | None:
+        """PatientID from the first readable header of the study (for grouped splits)."""
+        import pydicom
+
+        for ref in self.list_series(study_id):
+            for path in self._files(study_id, ref.series_id)[:1]:
+                try:
+                    value = pydicom.dcmread(path, stop_before_pixels=True).get("PatientID")
+                except Exception:  # noqa: BLE001 - unreadable header: try the next series
+                    continue
+                if value:
+                    return str(value)
+        return None
+
     def _csv_plane(self, study_id: str, series_id: str) -> str | None:
         for row in self._rows.get(study_id, []):
             if row["SeriesInstanceUID"] == series_id:
