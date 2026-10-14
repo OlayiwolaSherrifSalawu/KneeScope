@@ -12,8 +12,7 @@ export type ViewerPosition = {
 export type ShownPrediction = { predictionId: string; modelVersion: string };
 
 export type OverlayCheck =
-  | { ok: true; map: AttentionMap }
-  | { ok: false; reason: string; drawable: false };
+  { ok: true; map: AttentionMap } | { ok: false; reason: string; drawable: false };
 
 /**
  * DESIGN.md section 14: an attention map is drawn only when its series, slice, rendered size,
@@ -33,7 +32,9 @@ export function checkOverlay(
     return fail('Explanation was produced by a different model version.');
   if (!position) return fail('No slice is displayed.');
   if (explanation.series_id !== position.seriesId)
-    return fail(`Overlay was computed for series ${explanation.series_id ?? 'unknown'}, the viewer shows ${position.seriesId}.`);
+    return fail(
+      `Overlay was computed for series ${explanation.series_id ?? 'unknown'}, the viewer shows ${position.seriesId}.`,
+    );
   if (
     explanation.rendered_width !== position.renderedWidth ||
     explanation.rendered_height !== position.renderedHeight
