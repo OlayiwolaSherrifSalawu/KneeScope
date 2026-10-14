@@ -98,7 +98,7 @@ export interface paths {
         };
         /**
          * Readyz
-         * @description Ready to serve: fixture data loads (model mode adds checkpoint checks, KS-API-02).
+         * @description Ready to serve: the study catalogue loads (KS-API-02 adds checkpoint checks).
          */
         get: operations["readyz_readyz_get"];
         put?: never;
