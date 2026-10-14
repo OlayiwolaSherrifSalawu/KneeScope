@@ -75,7 +75,8 @@ def test_training_uses_the_shared_preprocessing_function():
         tree = ast.parse((root / rel).read_text())
         imported = {
             (node.module, a.name)
-            for node in ast.walk(tree) if isinstance(node, ast.ImportFrom)
+            for node in ast.walk(tree)
+            if isinstance(node, ast.ImportFrom)
             for a in node.names
         }
         assert ("kneescope_ml.preprocess", "preprocess_study") in imported, rel
