@@ -22,7 +22,13 @@ const withMap: Explanation = {
   ...explanation,
   kind: 'attention_map',
   attention: [
-    { slice_index: 12, width: 256, height: 256, encoding: 'png_base64_gray8', data: 'iVBORw0KGgo=' },
+    {
+      slice_index: 12,
+      width: 256,
+      height: 256,
+      encoding: 'png_base64_gray8',
+      data: 'iVBORw0KGgo=',
+    },
   ],
 };
 
@@ -114,7 +120,9 @@ describe('Explanation panel (KS-WEB-05)', () => {
     const panel = await runAnalysis(user);
     await user.selectOptions(screen.getByRole('combobox'), 'fx-ser-04');
     await user.click(within(panel).getByRole('checkbox', { name: /attention overlay/ }));
-    expect(within(panel).getByText(/Alignment check failed: Overlay was computed for series fx-ser-01/)).toBeTruthy();
+    expect(
+      within(panel).getByText(/Alignment check failed: Overlay was computed for series fx-ser-01/),
+    ).toBeTruthy();
     expect(screen.queryByTestId('attention-overlay')).toBeNull();
     expect(within(panel).getByText('Model attention (relative, not lesion location)')).toBeTruthy();
   });
@@ -132,7 +140,12 @@ describe('Explanation panel (KS-WEB-05)', () => {
 });
 
 describe('alignment rules', () => {
-  const position = { seriesId: 'fx-ser-01', sliceIndex: 12, renderedWidth: 256, renderedHeight: 256 };
+  const position = {
+    seriesId: 'fx-ser-01',
+    sliceIndex: 12,
+    renderedWidth: 256,
+    renderedHeight: 256,
+  };
   const shown = { predictionId: PID, modelVersion: 'fixture-0' };
 
   it('accepts only an exact match', () => {
