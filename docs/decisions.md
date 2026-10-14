@@ -59,6 +59,14 @@ entries may supersede earlier ones explicitly. Decisions still open are listed a
   Heavy ML dependencies (torch, pydicom, scikit-learn) live in the `ml` extra so fixture
   mode and CI stay light.
 
+## D-010 — 2026-10-13 — CPU-only PyTorch wheels in the lockfile
+- **Decision:** `torch`/`torchvision` resolve from the PyTorch CPU index
+  (`[tool.uv.sources]` in `pyproject.toml`). Training on a hosted GPU platform uses that
+  platform's own torch build; record its version in the run metadata.
+- **Why:** No GPU subscription is assumed; default Linux wheels pull several GB of CUDA
+  libraries, which is impractical for local setup, CI and the container.
+- **Consequences:** `uv sync --extra ml` works on any CPU machine; the `ml` CI job runs the
+  training smoke tests.
 ## D-011 — 2026-10-13 — Merge the original main scaffold without removing it
 - **Decision:** `main` (the team's original scaffold: `src/knee_api`, `src/kneeml`,
   `docs/contracts/01–07`, Docker, Makefile, pre-commit, CODEOWNERS) was merged into

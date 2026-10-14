@@ -10,7 +10,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SKIP_DIRS = {"node_modules", ".venv", ".git", "artifacts", "data", "dist"}
+SKIP_DIRS = {"node_modules", ".venv", ".git", ".claude", "artifacts", "data", "dist"}
 LINK = re.compile(r"\[[^\]]*\]\(([^)\s]+)\)")
 PLACEHOLDER = re.compile(r"\bTBD\b|\bTODO\b|lorem ipsum", re.IGNORECASE)
 
