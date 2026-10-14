@@ -52,6 +52,8 @@ export function FindingRow({
   onToggleLabel,
   onRetryLabel,
   onRetry,
+  selected = false,
+  onSelect,
 }: {
   finding: FindingResult;
   /** Source of the displayed result; null before any analysis has run. */
@@ -61,19 +63,37 @@ export function FindingRow({
   onToggleLabel: () => void;
   onRetryLabel: () => void;
   onRetry?: () => void;
+  /** Selected for the explanation panel (DESIGN.md section 9.8). */
+  selected?: boolean;
+  onSelect?: () => void;
 }) {
   const scored = f.status === 'scored' && f.score != null;
   return (
     <li
-      className={`finding ${f.status}${source === 'fixture' ? ' fixture' : ''}`}
+      className={`finding ${f.status}${source === 'fixture' ? ' fixture' : ''}${selected ? ' selected' : ''}`}
       data-status={f.status}
+      aria-current={selected ? 'true' : undefined}
     >
       <div role="group" aria-label={accessibleName(f, source)}>
-        <div className="finding-main">
-          <StateGlyph status={f.status} />
-          <span className="finding-name">{f.display_name}</span>
-          <StateText f={f} />
-        </div>
+        {onSelect ? (
+          <button
+            type="button"
+            className="finding-main"
+            aria-pressed={selected}
+            aria-label={`Select ${f.display_name}`}
+            onClick={onSelect}
+          >
+            <StateGlyph status={f.status} />
+            <span className="finding-name">{f.display_name}</span>
+            <StateText f={f} />
+          </button>
+        ) : (
+          <div className="finding-main">
+            <StateGlyph status={f.status} />
+            <span className="finding-name">{f.display_name}</span>
+            <StateText f={f} />
+          </div>
+        )}
         <div className="finding-sub">
           {scored ? (
             <>
