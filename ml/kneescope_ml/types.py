@@ -32,6 +32,12 @@ class SeriesVolume:
     pixel_spacing_mm: tuple[float, float] | None = None
     slice_thickness_mm: float | None = None
     description: str | None = None
+    # Row/column direction cosines (DICOM ImageOrientationPatient, LPS) as acquired.
+    orientation: tuple[float, ...] | None = None
+    # Laterality if the dataset kept it (L/R); recorded, never used to flip images.
+    laterality: str | None = None
+    # Reviewer-safe notes from loading (e.g. ordering fallback, plane mismatch).
+    warnings: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
