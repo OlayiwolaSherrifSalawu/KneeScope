@@ -74,6 +74,20 @@ dataset → audit (KS-DATA-03) → labels file (KS-LABEL-01) → grouped splits 
 Optional explanation branch from the slice encoder: influential slices (`KS-LABEL-03`),
 Grad-CAM (`KS-LABEL-04`, optional). It does not establish lesion location.
 
+## Data tooling (data workstream)
+
+| Step | Code | Command |
+|---|---|---|
+| Read RSNA layout, order slices, pick series | `ml/kneescope_ml/adapters/rsna.py` | used by every step below |
+| Audit (counts only) | `ml/kneescope_ml/audit.py` | `scripts/audit_dataset.py` |
+| Grouped, stratified splits + hash | `ml/kneescope_ml/splits.py` | `scripts/make_splits.py` |
+| Inspect preprocessed input | `ml/kneescope_ml/preprocess.py` | `scripts/inspect_preprocessing.py` |
+| Versioned tensor cache + dataset | `ml/kneescope_ml/data.py` | `scripts/cache_tensors.py` |
+| Demo manifest (evaluation partitions) | — | `scripts/build_manifest.py` |
+| Synthetic RSNA-layout data for tests | `ml/kneescope_ml/synthetic_rsna.py` | used by `tests/ml/` |
+
+All outputs go to `artifacts/` (git-ignored). Real-data runs wait for KS-DATA-01/04.
+
 ## Synchronous inference and the job-and-poll escape hatch
 
 Inference is synchronous until measured otherwise (`KS-OPS-03`). If p95 latency exceeds

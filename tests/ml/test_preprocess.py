@@ -45,3 +45,38 @@ def test_series_from_another_study_is_rejected():
     other = SeriesVolume("other", "x", "sagittal", np.ones((4, 8, 8), np.float32), "synthetic")
     with pytest.raises(PreprocessingError):
         preprocess_study("s", {"sagittal": other}, CFG)
+
+
+def test_short_series_is_padded_and_masked_with_source_mapping():
+    vol = np.stack([np.full((8, 8), float(k)) for k in range(5)]).astype(np.float32)
+    series = SeriesVolume("s", "x", "sagittal", vol, "synthetic")
+    pt = preprocess_study("s", {"sagittal": series}, CFG).planes["sagittal"]
+    assert pt.mask.sum() == 5 and not pt.mask[5:].any()
+    assert list(pt.source_slice_index[:5]) == [0, 1, 2, 3, 4]
+    assert (pt.source_slice_index[5:] == -1).all()
+
+
+def test_long_series_sampling_maps_back_to_ordered_source_slices():
+    vol = np.stack([np.full((8, 8), float(k)) for k in range(100)]).astype(np.float32)
+    series = SeriesVolume("s", "x", "coronal", vol, "synthetic")
+    pt = preprocess_study("s", {"coronal": series}, CFG).planes["coronal"]
+    src = pt.source_slice_index
+    assert pt.mask.all() and len(set(src.tolist())) == CFG.num_slices
+    means = [float(pt.volume[i].mean()) for i in range(CFG.num_slices)]
+    assert means == sorted(means)  # sampled slices keep spatial order
+
+
+def test_training_uses_the_shared_preprocessing_function():
+    import ast
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[2]
+    for rel in ("ml/kneescope_ml/train.py", "scripts/inspect_preprocessing.py"):
+        tree = ast.parse((root / rel).read_text())
+        imported = {
+            (node.module, a.name)
+            for node in ast.walk(tree)
+            if isinstance(node, ast.ImportFrom)
+            for a in node.names
+        }
+        assert ("kneescope_ml.preprocess", "preprocess_study") in imported, rel
