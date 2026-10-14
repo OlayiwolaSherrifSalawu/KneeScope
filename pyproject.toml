@@ -18,6 +18,10 @@ ml = [
   "torch>=2.3",
   "torchvision>=0.18",
   "pydicom>=2.4",
+  # Decoders for the RSNA transfer syntaxes (JPEG Lossless, JPEG 2000); KS-DATA-06
+  "pylibjpeg>=2.0",
+  "pylibjpeg-libjpeg>=2.1",
+  "pylibjpeg-openjpeg>=2.3",
   "scikit-learn>=1.5",
   "pandas>=2.2", # dataset CSVs (train.csv, train_series.csv) in audits and label building
 ]
