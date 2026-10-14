@@ -53,8 +53,9 @@ def _flag(value: str | None) -> bool | None:
 class RsnaAdapter:
     dataset_id = "rsna_knee_2026"
 
-    def __init__(self, root: Path, series_dir: str = "train_series",
-                 series_csv: str = "train_series.csv") -> None:
+    def __init__(
+        self, root: Path, series_dir: str = "train_series", series_csv: str = "train_series.csv"
+    ) -> None:
         self.root = Path(root)
         self.series_dir = self.root / series_dir
         self.series_csv = self.root / series_csv
@@ -82,12 +83,18 @@ class RsnaAdapter:
             if n == 0:
                 continue
             plane = PLANE_NAMES.get(row.get("Anatomical_Plane", "").strip().lower())
-            refs.append(SeriesRef(
-                study_id=study_id, series_id=series_id, plane=plane, num_slices=n,
-                slice_order="patient_position", description=None,
-                fluid_sensitive=_flag(row.get("Fluid_Sensitive")),
-                fat_suppressed=_flag(row.get("Fat_Suppression")),
-            ))
+            refs.append(
+                SeriesRef(
+                    study_id=study_id,
+                    series_id=series_id,
+                    plane=plane,
+                    num_slices=n,
+                    slice_order="patient_position",
+                    description=None,
+                    fluid_sensitive=_flag(row.get("Fluid_Sensitive")),
+                    fat_suppressed=_flag(row.get("Fat_Suppression")),
+                )
+            )
         return refs
 
     def select_series(self, study_id: str) -> dict[str, SeriesRef]:
@@ -120,12 +127,14 @@ class RsnaAdapter:
         if unreadable:
             raise PreprocessingError(
                 f"Series could not be read: {unreadable} of {len(files)} image files are "
-                "unreadable or corrupt.")
+                "unreadable or corrupt."
+            )
         shapes = {px.shape for _, px in slices}
         if len(shapes) != 1:
             raise PreprocessingError(
                 "Series mixes image sizes "
-                f"({', '.join(f'{r}x{c}' for r, c in sorted(shapes))}); no resampling rule is defined.")
+                f"({', '.join(f'{r}x{c}' for r, c in sorted(shapes))}); no resampling rule is defined."
+            )
 
         warnings: list[str] = []
         first = slices[0][0]
@@ -136,12 +145,14 @@ class RsnaAdapter:
                 if len(other) != 6 or np.max(np.abs(np.subtract(other, iop))) > ORIENTATION_TOLERANCE:
                     raise PreprocessingError("Series mixes slice orientations.")
         has_positions = len(iop) == 6 and all(
-            len(getattr(ds, "ImagePositionPatient", []) or []) == 3 for ds, _ in slices)
+            len(getattr(ds, "ImagePositionPatient", []) or []) == 3 for ds, _ in slices
+        )
 
         if has_positions:
             normal = np.cross(np.asarray(iop[:3]), np.asarray(iop[3:]))
-            keys = [float(np.dot(np.asarray(ds.ImagePositionPatient, dtype=float), normal))
-                    for ds, _ in slices]
+            keys = [
+                float(np.dot(np.asarray(ds.ImagePositionPatient, dtype=float), normal)) for ds, _ in slices
+            ]
             if len(set(np.round(keys, 4))) != len(keys):
                 warnings.append("Duplicate slice positions in series.")
             order, slice_order = np.argsort(keys, kind="mergesort"), "patient_position"
@@ -184,7 +195,7 @@ class RsnaAdapter:
             for path in self._files(study_id, ref.series_id)[:1]:
                 try:
                     value = pydicom.dcmread(path, stop_before_pixels=True).get("PatientID")
-                except Exception:  # noqa: BLE001 - unreadable header: try the next series
+                except Exception:
                     continue
                 if value:
                     return str(value)
