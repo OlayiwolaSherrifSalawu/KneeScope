@@ -14,10 +14,10 @@ from PIL import Image
 
 pytest.importorskip("pydicom")
 
-from kneescope_api.main import create_app  # noqa: E402
-from kneescope_api.settings import Settings, load_settings  # noqa: E402
-from kneescope_contracts.models import StudyList  # noqa: E402
-from kneescope_ml.synthetic_rsna import SyntheticSpec, write_synthetic_rsna  # noqa: E402
+from kneescope_api.main import create_app
+from kneescope_api.settings import Settings, load_settings
+from kneescope_contracts.models import StudyList
+from kneescope_ml.synthetic_rsna import SyntheticSpec, write_synthetic_rsna
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -26,8 +26,11 @@ ROOT = Path(__file__).resolve().parents[2]
 def model_app(tmp_path_factory):
     base = tmp_path_factory.mktemp("rsna-model-mode")
     data = base / "data"
-    studies = list(write_synthetic_rsna(data, SyntheticSpec(n_studies=6, missing_plane={4: "Axial"},
-                                                            corrupt={5: "truncated"})))
+    studies = list(
+        write_synthetic_rsna(
+            data, SyntheticSpec(n_studies=6, missing_plane={4: "Axial"}, corrupt={5: "truncated"})
+        )
+    )
     split = base / "split.csv"
     with split.open("w", newline="") as fh:
         w = csv.writer(fh)
@@ -35,11 +38,32 @@ def model_app(tmp_path_factory):
         for i, s in enumerate(studies):
             w.writerow([s, "train" if i < 2 else "validation", "x"])
     manifest = base / "manifest.json"
-    subprocess.run([sys.executable, str(ROOT / "scripts/build_manifest.py"), "--dataset", "rsna",
-                    "--root", str(data), "--split-file", str(split), "--n", "4", "--out", str(manifest)],
-                   check=True, capture_output=True)
-    settings = Settings(mode="model", finding_profile="interaction_prototype", cors_origins=(),
-                        log_level="info", manifest=manifest, data_root=data)
+    subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "scripts/build_manifest.py"),
+            "--dataset",
+            "rsna",
+            "--root",
+            str(data),
+            "--split-file",
+            str(split),
+            "--n",
+            "4",
+            "--out",
+            str(manifest),
+        ],
+        check=True,
+        capture_output=True,
+    )
+    settings = Settings(
+        mode="model",
+        finding_profile="interaction_prototype",
+        cors_origins=(),
+        log_level="info",
+        manifest=manifest,
+        data_root=data,
+    )
     return TestClient(create_app(settings)), data, json.loads(manifest.read_text())["studies"]
 
 
@@ -64,7 +88,8 @@ def test_slice_png_matches_manifest_rendered_size(model_app):
 def test_slice_out_of_range(model_app):
     client, _, manifest = model_app
     study, series = manifest[0], manifest[0]["series"][0]
-    resp = client.get(f"/studies/{study['study_id']}/series/{series['series_id']}/slices/{series['num_slices']}")
+    path = f"/studies/{study['study_id']}/series/{series['series_id']}/slices/{series['num_slices']}"
+    resp = client.get(path)
     assert resp.status_code == 404 and resp.json()["error"]["code"] == "SLICE_OUT_OF_RANGE"
 
 
@@ -108,9 +133,18 @@ def test_corrupt_series_returns_safe_preprocessing_error(tmp_path):
     detail = bm.study_detail(RsnaAdapter(data), studies[0], "Demo study 1", 512)
     manifest = tmp_path / "m.json"
     manifest.write_text(json.dumps({"studies": [detail.model_dump(mode="json")]}))
-    client = TestClient(create_app(Settings(mode="model", finding_profile="interaction_prototype",
-                                            cors_origins=(), log_level="info", manifest=manifest,
-                                            data_root=data)))
+    client = TestClient(
+        create_app(
+            Settings(
+                mode="model",
+                finding_profile="interaction_prototype",
+                cors_origins=(),
+                log_level="info",
+                manifest=manifest,
+                data_root=data,
+            )
+        )
+    )
     sag = next(s for s in detail.series if s.plane and s.plane.value == "sagittal" and s.fluid_sensitive)
     resp = client.get(f"/studies/{studies[0]}/series/{sag.series_id}/slices/0")
     assert resp.status_code == 422 and resp.json()["error"]["code"] == "PREPROCESSING_FAILED"
