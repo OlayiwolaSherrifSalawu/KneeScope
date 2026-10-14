@@ -33,8 +33,11 @@ def main() -> int:
     ap.add_argument("--seed", type=int, default=2026)
     ap.add_argument("--fractions", default="0.7,0.15,0.15", help="train,validation,test")
     ap.add_argument("--group-by", choices=["patient", "study"], default="patient")
-    ap.add_argument("--include-unlabelled", action="store_true",
-                    help="Add unlabelled studies (training only; they follow their patient's partition)")
+    ap.add_argument(
+        "--include-unlabelled",
+        action="store_true",
+        help="Add unlabelled studies (training only; they follow their patient's partition)",
+    )
     ap.add_argument("--out-dir", type=Path, default=Path("artifacts/splits"))
     ap.add_argument("--expect-hash", default=None)
     args = ap.parse_args()
@@ -46,8 +49,9 @@ def main() -> int:
     labels = read_rsna_label_states(args.root / "train.csv", columns)
     adapter = RsnaAdapter(args.root)
     on_disk = set(adapter.list_studies())
-    labelled = sorted(s for s in on_disk
-                      if s in labels and any(v != "not_labeled" for v in labels[s].values()))
+    labelled = sorted(
+        s for s in on_disk if s in labels and any(v != "not_labeled" for v in labels[s].values())
+    )
     unlabelled = sorted(on_disk - set(labelled))
 
     def group_of(study: str) -> str:
@@ -58,8 +62,14 @@ def main() -> int:
 
     groups = {s: group_of(s) for s in labelled}
     fractions = tuple(float(x) for x in args.fractions.split(","))
-    result = make_splits(groups, labels, findings, seed=args.seed, fractions=fractions,  # type: ignore[arg-type]
-                         grouping=args.group_by)
+    result = make_splits(
+        groups,
+        labels,
+        findings,
+        seed=args.seed,
+        fractions=fractions,  # type: ignore[arg-type]
+        grouping=args.group_by,
+    )
     assignment = dict(result.assignment)
     if args.include_unlabelled:
         by_group = {groups[s]: p for s, p in assignment.items()}
@@ -80,9 +90,16 @@ def main() -> int:
             gh = hashlib.sha256(f"{salt}:{groups[s]}".encode()).hexdigest()[:16]
             w.writerow([s, assignment[s], gh])
     counts = partition_counts(assignment, labels, findings)
-    meta = {"split_hash": digest, "seed": args.seed, "grouping": args.group_by,
-            "fractions": fractions, "profile": args.profile, "counts": counts,
-            "labelled_studies": len(labelled), "unlabelled_included": args.include_unlabelled}
+    meta = {
+        "split_hash": digest,
+        "seed": args.seed,
+        "grouping": args.group_by,
+        "fractions": fractions,
+        "profile": args.profile,
+        "counts": counts,
+        "labelled_studies": len(labelled),
+        "unlabelled_included": args.include_unlabelled,
+    }
     (args.out_dir / f"{stem}.json").write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
 
     print(f"split hash {digest}")
