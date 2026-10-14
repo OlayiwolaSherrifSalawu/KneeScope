@@ -23,6 +23,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 import numpy as np
+from pydicom.uid import UID
 
 RSNA_LABELS = (
     "ACL",
@@ -66,8 +67,8 @@ class SyntheticSpec:
     unknown_rate: float = 0.15  # blank labels inside labelled studies
 
 
-def _uid(rng: random.Random) -> str:
-    return UID_ROOT + ".".join(str(rng.randint(1, 10**9)) for _ in range(3))
+def _uid(rng: random.Random) -> UID:
+    return UID(UID_ROOT + ".".join(str(rng.randint(1, 10**9)) for _ in range(3)))
 
 
 def write_synthetic_rsna(root: Path, spec: SyntheticSpec | None = None) -> dict[str, list[str]]:
