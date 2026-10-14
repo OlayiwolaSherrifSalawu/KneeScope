@@ -16,22 +16,42 @@ from typing import Any
 from kneescope_ml.adapters.rsna import RsnaAdapter
 
 RSNA_LABELS = (
-    "ACL", "MCL", "Medial Meniscus", "Lateral Meniscus", "Medial OA", "Lateral OA",
-    "PF OA", "Effusion", "Synovitis", "Baker's", "Contusion", "Fracture",
+    "ACL",
+    "MCL",
+    "Medial Meniscus",
+    "Lateral Meniscus",
+    "Medial OA",
+    "Lateral OA",
+    "PF OA",
+    "Effusion",
+    "Synovitis",
+    "Baker's",
+    "Contusion",
+    "Fracture",
 )
-GROUPING_FIELDS = ("PatientID", "IssuerOfPatientID", "InstitutionName", "StationName",
-                   "Manufacturer", "ManufacturerModelName")
+GROUPING_FIELDS = (
+    "PatientID",
+    "IssuerOfPatientID",
+    "InstitutionName",
+    "StationName",
+    "Manufacturer",
+    "ManufacturerModelName",
+)
 
 
 def _summary(values: list[int]) -> dict[str, float | int | None]:
     if not values:
         return {"n": 0, "min": None, "median": None, "max": None}
-    return {"n": len(values), "min": min(values), "median": statistics.median(values),
-            "max": max(values)}
+    return {"n": len(values), "min": min(values), "median": statistics.median(values), "max": max(values)}
 
 
-def audit_rsna(root: Path, *, header_sample_per_series: int = 1,
-               decode_sample_per_series: int = 1, limit: int | None = None) -> dict[str, Any]:
+def audit_rsna(
+    root: Path,
+    *,
+    header_sample_per_series: int = 1,
+    decode_sample_per_series: int = 1,
+    limit: int | None = None,
+) -> dict[str, Any]:
     """Audit an RSNA-layout directory. ``limit`` caps studies inspected on disk."""
     import pydicom
 
@@ -82,7 +102,7 @@ def audit_rsna(root: Path, *, header_sample_per_series: int = 1,
             for i, f in enumerate(files[: max(header_sample_per_series, decode_sample_per_series)]):
                 try:
                     ds = pydicom.dcmread(f, stop_before_pixels=i >= decode_sample_per_series)
-                except Exception:  # noqa: BLE001 - any read failure is counted, not raised
+                except Exception:
                     unreadable_headers += 1
                     continue
                 ts = getattr(getattr(ds, "file_meta", None), "TransferSyntaxUID", None)
@@ -96,7 +116,7 @@ def audit_rsna(root: Path, *, header_sample_per_series: int = 1,
                 if i < decode_sample_per_series:
                     try:
                         _ = ds.pixel_array
-                    except Exception:  # noqa: BLE001
+                    except Exception:
                         undecodable += 1
         patient_per_study.append(len(study_patients))
 
@@ -122,8 +142,10 @@ def audit_rsna(root: Path, *, header_sample_per_series: int = 1,
             "distinct_values": {f: len(v) for f, v in grouping.items() if v},
         },
         "disk_bytes_inspected": disk_bytes,
-        "sampling": {"header_files_per_series": header_sample_per_series,
-                     "decoded_files_per_series": decode_sample_per_series},
+        "sampling": {
+            "header_files_per_series": header_sample_per_series,
+            "decoded_files_per_series": decode_sample_per_series,
+        },
     }
 
 
@@ -132,19 +154,24 @@ def markdown_tables(report: dict[str, Any], findings: tuple[str, ...] = RSNA_LAB
     lines = ["| Finding | Positive | Negative | Unknown | Not labelled |", "|---|---|---|---|---|"]
     for name in findings:
         c = report["labels"][name]
-        lines.append(f"| {name} | {c.get('positive', 0)} | {c.get('negative', 0)} | "
-                     f"{c.get('unknown', 0)} | {c.get('not_labeled', 0)} |")
+        lines.append(
+            f"| {name} | {c.get('positive', 0)} | {c.get('negative', 0)} | "
+            f"{c.get('unknown', 0)} | {c.get('not_labeled', 0)} |"
+        )
     lines += ["", "| Plane | Studies with ≥1 series |", "|---|---|"]
     for plane, n in report["studies_with_plane"].items():
         lines.append(f"| {plane} | {n} |")
     s, sl = report["series_per_study"], report["slices_per_series"]
-    lines += ["", f"Studies in train.csv: {report['studies_in_train_csv']}; labelled: "
-              f"{report['labelled_studies']}; inspected on disk: {report['studies_on_disk_inspected']}.",
-              f"Series per study: median {s['median']} (range {s['min']}–{s['max']}). "
-              f"Slices per series: median {sl['median']} (range {sl['min']}–{sl['max']}).",
-              f"Transfer syntaxes (sampled): {report['transfer_syntaxes_sampled']}. "
-              f"Unreadable: {report['unreadable_files_sampled']}; undecodable: "
-              f"{report['undecodable_files_sampled']}.",
-              f"Grouping fields present: {report['grouping']['fields_present'] or 'none'}; "
-              f"distinct PatientID: {report['grouping']['distinct_patient_ids']}."]
+    lines += [
+        "",
+        f"Studies in train.csv: {report['studies_in_train_csv']}; labelled: "
+        f"{report['labelled_studies']}; inspected on disk: {report['studies_on_disk_inspected']}.",
+        f"Series per study: median {s['median']} (range {s['min']}–{s['max']}). "
+        f"Slices per series: median {sl['median']} (range {sl['min']}–{sl['max']}).",
+        f"Transfer syntaxes (sampled): {report['transfer_syntaxes_sampled']}. "
+        f"Unreadable: {report['unreadable_files_sampled']}; undecodable: "
+        f"{report['undecodable_files_sampled']}.",
+        f"Grouping fields present: {report['grouping']['fields_present'] or 'none'}; "
+        f"distinct PatientID: {report['grouping']['distinct_patient_ids']}.",
+    ]
     return "\n".join(lines) + "\n"
