@@ -64,7 +64,6 @@ def test_fractions_roughly_respected_and_positives_spread():
 
 
 def test_unknown_is_never_counted_as_negative():
-    groups = {"a": "a", "b": "b"}
     labels = {"a": {"acl": "unknown"}, "b": {"acl": "not_labeled"}}
     counts = partition_counts({"a": "train", "b": "train"}, labels, ["acl"])
     assert counts["train"]["acl"] == {"positive": 0, "negative": 0, "unknown": 2, "studies": 2}
@@ -83,8 +82,18 @@ def test_cli_hash_check_and_privacy(tmp_path):
     data = tmp_path / "rsna"
     write_synthetic_rsna(data, SyntheticSpec(n_studies=8, patients=5, labelled_fraction=1.0))
     out = tmp_path / "splits"
-    cmd = [sys.executable, str(ROOT / "scripts/make_splits.py"), "--dataset", "rsna", "--root",
-           str(data), "--out-dir", str(out), "--seed", "2026"]
+    cmd = [
+        sys.executable,
+        str(ROOT / "scripts/make_splits.py"),
+        "--dataset",
+        "rsna",
+        "--root",
+        str(data),
+        "--out-dir",
+        str(out),
+        "--seed",
+        "2026",
+    ]
     first = subprocess.run(cmd, capture_output=True, text=True, check=True).stdout
     digest = first.split("split hash ")[1].split()[0]
     again = subprocess.run([*cmd, "--expect-hash", digest], capture_output=True, text=True)
