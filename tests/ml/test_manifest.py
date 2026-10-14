@@ -10,8 +10,8 @@ import pytest
 
 pytest.importorskip("pydicom")
 
-from kneescope_contracts.models import StudyDetail  # noqa: E402
-from kneescope_ml.synthetic_rsna import SyntheticSpec, write_synthetic_rsna  # noqa: E402
+from kneescope_contracts.models import StudyDetail
+from kneescope_ml.synthetic_rsna import SyntheticSpec, write_synthetic_rsna
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -30,9 +30,24 @@ def setup(tmp_path):
 
 
 def run(data, split, out, n=4):
-    return subprocess.run([sys.executable, str(ROOT / "scripts/build_manifest.py"), "--dataset", "rsna",
-                           "--root", str(data), "--split-file", str(split), "--n", str(n), "--out", str(out)],
-                          capture_output=True, text=True)
+    return subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "scripts/build_manifest.py"),
+            "--dataset",
+            "rsna",
+            "--root",
+            str(data),
+            "--split-file",
+            str(split),
+            "--n",
+            str(n),
+            "--out",
+            str(out),
+        ],
+        capture_output=True,
+        text=True,
+    )
 
 
 def test_manifest_validates_and_excludes_training(setup):
