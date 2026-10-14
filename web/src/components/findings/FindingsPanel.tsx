@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import type { FindingDefinition, FindingResult } from '../../api/types';
 import { ErrorPanel } from '../ErrorPanel';
 import { PLANE_LABEL } from '../viewer/PlaneTabs';
@@ -30,6 +31,9 @@ export function FindingsPanel({
   onToggleLabel,
   onRetryLabel,
   labelNotice,
+  selectedId = null,
+  onSelect,
+  children,
 }: {
   definitions: FindingDefinition[];
   analysis: Analysis;
@@ -40,6 +44,11 @@ export function FindingsPanel({
   onRetryLabel: () => void;
   /** Evaluation-only notice from the labels endpoint, shown while a label is visible. */
   labelNotice: string | null;
+  /** Finding shown in the explanation panel; `[` and `]` move it (DESIGN.md section 12). */
+  selectedId?: string | null;
+  onSelect?: (findingId: string) => void;
+  /** Rendered under the list (the explanation panel). */
+  children?: ReactNode;
 }) {
   const result = analysis.phase === 'done' ? analysis.result : null;
   const source = result?.provenance.source ?? null;
@@ -76,10 +85,13 @@ export function FindingsPanel({
             onToggleLabel={() => onToggleLabel(f.finding_id)}
             onRetryLabel={onRetryLabel}
             onRetry={onRun}
+            selected={f.finding_id === selectedId}
+            onSelect={onSelect ? () => onSelect(f.finding_id) : undefined}
           />
         ))}
       </ul>
       {labelNotice ? <p className="label-notice faint">{labelNotice}</p> : null}
+      {children}
     </aside>
   );
 }
