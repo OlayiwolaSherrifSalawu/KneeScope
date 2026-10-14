@@ -25,8 +25,18 @@ from pathlib import Path
 import numpy as np
 
 RSNA_LABELS = (
-    "ACL", "MCL", "Medial Meniscus", "Lateral Meniscus", "Medial OA", "Lateral OA",
-    "PF OA", "Effusion", "Synovitis", "Baker's", "Contusion", "Fracture",
+    "ACL",
+    "MCL",
+    "Medial Meniscus",
+    "Lateral Meniscus",
+    "Medial OA",
+    "Lateral OA",
+    "PF OA",
+    "Effusion",
+    "Synovitis",
+    "Baker's",
+    "Contusion",
+    "Fracture",
 )
 PLANES = ("Sagittal", "Coronal", "Axial")
 SLICE_CODE_BASE = 100
@@ -92,11 +102,15 @@ def write_synthetic_rsna(root: Path, spec: SyntheticSpec | None = None) -> dict[
         for plane, fluid, fat in series_defs:
             series_uid = _uid(rng)
             studies[study_uid].append(series_uid)
-            series_rows.append({
-                "StudyInstanceUID": study_uid, "SeriesInstanceUID": series_uid,
-                "Fluid_Sensitive": str(int(fluid)), "Fat_Suppression": str(int(fat)),
-                "Anatomical_Plane": plane,
-            })
+            series_rows.append(
+                {
+                    "StudyInstanceUID": study_uid,
+                    "SeriesInstanceUID": series_uid,
+                    "Fluid_Sensitive": str(int(fluid)),
+                    "Fat_Suppression": str(int(fat)),
+                    "Anatomical_Plane": plane,
+                }
+            )
             sdir = root / "train_series" / study_uid / series_uid
             sdir.mkdir(parents=True, exist_ok=True)
             row, col = np.array(ORIENTATION[plane][:3]), np.array(ORIENTATION[plane][3:])
@@ -146,10 +160,20 @@ def write_synthetic_rsna(root: Path, spec: SyntheticSpec | None = None) -> dict[
                 extra.file_meta.MediaStorageSOPInstanceUID = _uid(rng)
                 extra.file_meta.TransferSyntaxUID = ExplicitVRLittleEndian
                 odd = pydicom.dcmread(next(sdir.glob("*.dcm")))
-                for tag in ("StudyInstanceUID", "SeriesInstanceUID", "PatientID",
-                            "ImageOrientationPatient", "PixelSpacing", "SliceThickness",
-                            "SamplesPerPixel", "PhotometricInterpretation", "BitsAllocated",
-                            "BitsStored", "HighBit", "PixelRepresentation"):
+                for tag in (
+                    "StudyInstanceUID",
+                    "SeriesInstanceUID",
+                    "PatientID",
+                    "ImageOrientationPatient",
+                    "PixelSpacing",
+                    "SliceThickness",
+                    "SamplesPerPixel",
+                    "PhotometricInterpretation",
+                    "BitsAllocated",
+                    "BitsStored",
+                    "HighBit",
+                    "PixelRepresentation",
+                ):
                     setattr(extra, tag, getattr(odd, tag))
                 extra.SOPClassUID = MRImageStorage
                 extra.SOPInstanceUID = extra.file_meta.MediaStorageSOPInstanceUID
