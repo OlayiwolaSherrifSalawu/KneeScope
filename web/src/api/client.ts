@@ -132,6 +132,29 @@ export const api = {
   modelCard: (o?: Opts) => request<ModelCard>('/model-card', o),
 };
 
+/**
+ * Asks the API why a slice image failed to load. An image element exposes no status, so the
+ * same URL is fetched once on the error path to read the ApiError code. Never throws.
+ */
+export async function diagnoseSliceFailure(url: string): Promise<ApiRequestError> {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      return toApiRequestError(response.status, await response.json().catch(() => null));
+    }
+    return new ApiRequestError({
+      code: 'IMAGE_DECODE_FAILED',
+      message: 'The slice image could not be decoded.',
+    });
+  } catch {
+    return new ApiRequestError({
+      code: API_UNREACHABLE,
+      message: 'The KneeScope API could not be reached.',
+      retryable: true,
+    });
+  }
+}
+
 /** URL of the 8-bit PNG for a slice. `sliceIndex` is 0-based, as in the API. */
 export function sliceUrl(studyId: string, seriesId: string, sliceIndex: number): string {
   return `${apiBaseUrl()}/studies/${enc(studyId)}/series/${enc(seriesId)}/slices/${sliceIndex}`;

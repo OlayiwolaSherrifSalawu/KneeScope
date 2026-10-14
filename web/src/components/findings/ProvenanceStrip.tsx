@@ -1,9 +1,14 @@
-import type { PredictionResponse } from '../api/types';
-import { HatchBlock } from './StateGlyph';
 import { Clock } from 'lucide-react';
+import type { PredictionResponse } from '../../api/types';
+import { HatchBlock } from '../StateGlyph';
 
-function SourceBadge({ p }: { p: PredictionResponse }) {
-  const { provenance, model } = p;
+/** First 8 hex characters of a checkpoint SHA-256, for display. */
+export function shortSha(sha: string | null | undefined): string | null {
+  return sha ? sha.slice(0, 8) : null;
+}
+
+function SourceBadge({ result }: { result: PredictionResponse }) {
+  const { provenance, model } = result;
   switch (provenance.source) {
     case 'fixture':
       return (
@@ -18,7 +23,8 @@ function SourceBadge({ p }: { p: PredictionResponse }) {
           <Clock className="i" aria-hidden="true" />
           CACHED
           <span className="mono" style={{ fontWeight: 400 }}>
-            from {provenance.computed_at}, checkpoint {model.checkpoint_sha256?.slice(0, 8)}
+            from {provenance.computed_at ?? 'unknown time'}, checkpoint{' '}
+            {shortSha(model.checkpoint_sha256) ?? 'unknown'}
           </span>
         </span>
       );
@@ -34,25 +40,34 @@ function SourceBadge({ p }: { p: PredictionResponse }) {
   }
 }
 
-/** Provenance is always visible once a result exists (DESIGN.md section 9.7). */
+/**
+ * Provenance is always visible once a result exists (DESIGN.md section 9.7): source badge,
+ * model and preprocessing versions, checkpoint, original computation time, and latency for
+ * live results only. A cached result never shows "computed now" or a latency.
+ */
 export function ProvenanceStrip({ result }: { result: PredictionResponse }) {
   const { provenance, model, preprocessing } = result;
+  const checkpoint = shortSha(model.checkpoint_sha256);
   return (
-    <section className="prov" aria-label="Result provenance">
-      <SourceBadge p={result} />
+    <section className="prov" aria-label="Result provenance" data-source={provenance.source}>
+      <SourceBadge result={result} />
       <dl>
         <dt>Model</dt>
         <dd>
           {model.model_id} {model.model_version}
         </dd>
+        <dt>Checkpoint</dt>
+        <dd>{checkpoint ?? <span className="faint">none</span>}</dd>
         <dt>Preprocessing</dt>
         <dd>{preprocessing.version}</dd>
         {provenance.computed_at ? (
           <>
-            <dt>Computed</dt>
+            <dt>{provenance.source === 'cached' ? 'Originally computed' : 'Computed'}</dt>
             <dd>{provenance.computed_at}</dd>
           </>
         ) : null}
+        <dt>Served</dt>
+        <dd>{provenance.served_at}</dd>
         {provenance.source === 'live' && provenance.latency_ms != null ? (
           <>
             <dt>Latency</dt>

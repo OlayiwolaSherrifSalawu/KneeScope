@@ -209,7 +209,8 @@ the image.
 
 ### 9.7 Provenance strip
 Directly under the findings header after a result exists. Shows: source badge, model
-version (mono), preprocessing version (mono), computed time, latency if live. Badges:
+ID and version (mono), checkpoint short SHA (8 characters; "none" for fixtures),
+preprocessing version (mono), computed time, served time, latency if live. Badges:
 
 | Source | Shape and text | Colour |
 |---|---|---|
