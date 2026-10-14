@@ -1,7 +1,8 @@
 import type { FindingDefinition, FindingResult } from '../../api/types';
 import { ErrorPanel } from '../ErrorPanel';
 import { PLANE_LABEL } from '../viewer/PlaneTabs';
-import { FindingRow, type LabelReveal } from './FindingRow';
+import { FindingRow } from './FindingRow';
+import type { LabelRevealState } from './LabelReveal';
 import { ProvenanceStrip } from './ProvenanceStrip';
 import { RunAnalysisButton, RunStatus } from './RunAnalysis';
 import type { Analysis, Announcement } from './useAnalysis';
@@ -26,14 +27,19 @@ export function FindingsPanel({
   announcement,
   onRun,
   revealFor,
-  onRevealLabel,
+  onToggleLabel,
+  onRetryLabel,
+  labelNotice,
 }: {
   definitions: FindingDefinition[];
   analysis: Analysis;
   announcement: Announcement;
   onRun: () => void;
-  revealFor: (findingId: string) => LabelReveal | undefined;
-  onRevealLabel: (findingId: string) => void;
+  revealFor: (findingId: string) => LabelRevealState | undefined;
+  onToggleLabel: (findingId: string) => void;
+  onRetryLabel: () => void;
+  /** Evaluation-only notice from the labels endpoint, shown while a label is visible. */
+  labelNotice: string | null;
 }) {
   const result = analysis.phase === 'done' ? analysis.result : null;
   const source = result?.provenance.source ?? null;
@@ -67,11 +73,13 @@ export function FindingsPanel({
             finding={f}
             source={source}
             reveal={revealFor(f.finding_id)}
-            onRevealLabel={() => onRevealLabel(f.finding_id)}
+            onToggleLabel={() => onToggleLabel(f.finding_id)}
+            onRetryLabel={onRetryLabel}
             onRetry={onRun}
           />
         ))}
       </ul>
+      {labelNotice ? <p className="label-notice faint">{labelNotice}</p> : null}
     </aside>
   );
 }

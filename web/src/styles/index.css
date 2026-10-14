@@ -814,6 +814,11 @@ input[type='range'] {
   flex-wrap: wrap;
   margin-left: -6px;
 }
+.label-notice {
+  margin: 0;
+  padding: var(--ks-space-3) var(--ks-space-4);
+  font-size: 12px;
+}
 .label-reveal {
   font-size: 12px;
   padding: 6px 8px;

@@ -1,24 +1,6 @@
-import type { DatasetLabel, FindingResult, ResultSource } from '../../api/types';
+import type { FindingResult, ResultSource } from '../../api/types';
 import { StateGlyph } from '../StateGlyph';
-
-export type LabelReveal =
-  | { phase: 'loading' }
-  | { phase: 'ready'; label: DatasetLabel | null }
-  | { phase: 'error'; message: string; code: string };
-
-const STATE_TEXT: Record<DatasetLabel['state'], string> = {
-  positive: 'Positive',
-  negative: 'Negative',
-  unknown: 'Unknown (not labelled)',
-  not_labeled: 'Not labelled (outside the labelled subset)',
-};
-
-const PROVENANCE_TEXT: Record<DatasetLabel['provenance'], string> = {
-  expert_annotation: 'Expert annotation',
-  dataset_provided: 'Dataset-provided',
-  report_extracted: 'Extracted from report',
-  fixture: 'Fixture',
-};
+import { LabelReveal, type LabelRevealState } from './LabelReveal';
 
 export function formatScore(score: number): string {
   return score.toFixed(2);
@@ -67,14 +49,17 @@ export function FindingRow({
   finding: f,
   source,
   reveal,
-  onRevealLabel,
+  onToggleLabel,
+  onRetryLabel,
   onRetry,
 }: {
   finding: FindingResult;
   /** Source of the displayed result; null before any analysis has run. */
   source: ResultSource | null;
-  reveal?: LabelReveal;
-  onRevealLabel: () => void;
+  /** undefined while the dataset label is hidden. */
+  reveal?: LabelRevealState;
+  onToggleLabel: () => void;
+  onRetryLabel: () => void;
   onRetry?: () => void;
 }) {
   const scored = f.status === 'scored' && f.score != null;
@@ -111,42 +96,14 @@ export function FindingRow({
               </button>
             </div>
           ) : null}
-          <div className="finding-actions">
-            <button
-              type="button"
-              className="btn quiet"
-              onClick={onRevealLabel}
-              disabled={reveal?.phase === 'loading'}
-              aria-label={`Reveal dataset label for ${f.display_name}`}
-            >
-              Reveal dataset label
-            </button>
-          </div>
-          {reveal ? <LabelView reveal={reveal} /> : null}
+          <LabelReveal
+            findingName={f.display_name}
+            reveal={reveal}
+            onToggle={onToggleLabel}
+            onRetry={onRetryLabel}
+          />
         </div>
       </div>
     </li>
-  );
-}
-
-function LabelView({ reveal }: { reveal: LabelReveal }) {
-  if (reveal.phase === 'loading') return <div className="label-reveal">Loading dataset label…</div>;
-  if (reveal.phase === 'error') {
-    return (
-      <div className="label-reveal" role="alert">
-        Dataset label unavailable — <span className="mono">{reveal.code}</span>
-      </div>
-    );
-  }
-  const { label } = reveal;
-  if (!label) return <div className="label-reveal">No dataset label for this finding.</div>;
-  return (
-    <div className="label-reveal">
-      <div>Dataset label: {STATE_TEXT[label.state]}</div>
-      <div className="faint">
-        {PROVENANCE_TEXT[label.provenance]}
-        {label.source_ref ? <span className="mono"> · {label.source_ref}</span> : null}
-      </div>
-    </div>
   );
 }
