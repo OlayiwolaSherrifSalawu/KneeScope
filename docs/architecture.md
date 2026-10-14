@@ -38,8 +38,11 @@ knee-scope/
 | Fixture (now) | `fixture` | `contracts/fixtures/studies.json` (synthetic phantoms) | `source: fixture`, `fixture-model`, no checkpoint | `unavailable` |
 | Model (backlog) | `model` | Manifest of permitted studies via adapter | `source: live` or `cached` with checkpoint SHA | Snapshot for loaded `model_version` |
 
-Model mode currently returns `503 MODEL_NOT_LOADED` for every data route rather than
-pretending (implemented by `KS-API-01`/`KS-API-02`).
+Model mode (`KNEESCOPE_MANIFEST` + `KNEESCOPE_DATA_ROOT`) serves `/studies`,
+`/studies/{id}` and slices from the manifest through `DatasetCatalogue`
+(`api/kneescope_api/catalogue.py`, KS-API-01). Predictions, explanations, labels, metrics
+and the model card still return `503 MODEL_NOT_LOADED` in model mode rather than
+pretending (KS-API-02, KS-API-05).
 
 ## Request flow (model mode, target)
 
