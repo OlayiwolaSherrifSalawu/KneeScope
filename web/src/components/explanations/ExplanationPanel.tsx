@@ -60,7 +60,11 @@ export function ExplanationPanel({
       {state.phase === 'none' ? <Unavailable reason={state.reason} /> : null}
       {state.phase === 'loading' ? <p className="faint">Loading explanation…</p> : null}
       {state.phase === 'error' ? (
-        <ErrorPanel error={state.error} title="Explanation could not be loaded" onRetry={state.reload} />
+        <ErrorPanel
+          error={state.error}
+          title="Explanation could not be loaded"
+          onRetry={state.reload}
+        />
       ) : null}
       {e && e.status === 'unavailable' ? (
         <Unavailable reason={e.reason?.message ?? 'No explanation was produced.'} />
