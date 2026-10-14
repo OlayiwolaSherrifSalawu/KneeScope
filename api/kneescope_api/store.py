@@ -1,8 +1,8 @@
-"""Study catalogue and fixture-backed artifacts.
+"""Fixture-backed artifacts (contracts/fixtures).
 
-In fixture mode every study, prediction, label, explanation and metric comes from
-``contracts/fixtures``. Real dataset manifests and the prediction cache are added by
-KS-API-01 and KS-API-04; they must keep the same response contracts.
+Studies are served through ``kneescope_api.catalogue`` (fixture or dataset manifest,
+KS-API-01). Predictions, explanations, labels, metrics and the model card come from the
+fixtures in fixture mode; the prediction cache is KS-API-04.
 """
 
 from __future__ import annotations
