@@ -32,7 +32,7 @@ def main() -> int:
     if cfg.data_source == "synthetic_smoke":
         examples = synthetic_examples(cfg, prep)
     else:
-        print("data.source 'cache' requires KS-DATA-09 (tensor cache); not implemented yet.")
+        print("data.source 'cache': the tensor cache exists (scripts/cache_tensors.py); wiring it into training is KS-MODEL-03.")
         return 2
     run_dir = train(cfg, examples, args.out, prep=prep, run_id=args.run_id, resume=args.resume)
     meta = json.loads((run_dir / "metadata.json").read_text())
