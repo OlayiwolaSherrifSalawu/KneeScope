@@ -21,9 +21,14 @@ function paintOverlay(canvas: HTMLCanvasElement, layer: OverlayLayer, onDone: ()
     scratch.width = width;
     scratch.height = height;
     const sctx = scratch.getContext('2d');
-    if (!sctx) return;
+    if (!sctx || typeof sctx.getImageData !== 'function') return;
     sctx.drawImage(img, 0, 0, width, height);
-    const data = sctx.getImageData(0, 0, width, height);
+    let data: ImageData;
+    try {
+      data = sctx.getImageData(0, 0, width, height);
+    } catch {
+      return; // no pixel access: draw nothing rather than a wrong overlay
+    }
     for (let i = 0; i < data.data.length; i += 4) {
       const [r, g, b, a] = attentionRgba((data.data[i] ?? 0) / 255, layer.opacity);
       data.data[i] = r;
