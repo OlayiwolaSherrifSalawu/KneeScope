@@ -8,9 +8,9 @@ import pytest
 
 pytest.importorskip("pydicom")
 
-from kneescope_ml.adapters.rsna import RsnaAdapter, plane_from_orientation  # noqa: E402
-from kneescope_ml.preprocess import PreprocessingError  # noqa: E402
-from kneescope_ml.synthetic_rsna import (  # noqa: E402
+from kneescope_ml.adapters.rsna import RsnaAdapter, plane_from_orientation
+from kneescope_ml.preprocess import PreprocessingError
+from kneescope_ml.synthetic_rsna import (
     ORIENTATION,
     SLICE_CODE_BASE,
     SyntheticSpec,
@@ -22,7 +22,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 def centre_codes(pixels: np.ndarray) -> list[int]:
     c = pixels.shape[1] // 2
-    return [int(round(v)) for v in pixels[:, c, c]]
+    return [round(float(v)) for v in pixels[:, c, c]]
 
 
 @pytest.fixture
@@ -43,7 +43,7 @@ def test_orders_by_position_not_filename_or_instance_number(dataset):
 
 
 def test_plane_mismatch_gives_none_and_warning(dataset):
-    root, studies = dataset
+    root, _studies = dataset
     rows = list(csv.DictReader((root / "train_series.csv").open()))
     target = next(r for r in rows if r["Anatomical_Plane"] == "Coronal")
     target["Anatomical_Plane"] = "Axial"  # wrong label for a coronal acquisition
@@ -75,8 +75,9 @@ def test_missing_plane_is_simply_absent(dataset):
 
 @pytest.mark.parametrize("syntax", ["explicit", "implicit", "rle", "jpeg2000"])
 def test_decodes_each_transfer_syntax(tmp_path, syntax):
-    studies = write_synthetic_rsna(tmp_path, SyntheticSpec(n_studies=1, transfer_syntax=syntax,
-                                                           extra_sagittal_t1=False))
+    studies = write_synthetic_rsna(
+        tmp_path, SyntheticSpec(n_studies=1, transfer_syntax=syntax, extra_sagittal_t1=False)
+    )
     study = next(iter(studies))
     adapter = RsnaAdapter(tmp_path)
     ref = adapter.select_series(study)["sagittal"]
