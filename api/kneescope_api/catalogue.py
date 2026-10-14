@@ -120,7 +120,7 @@ class _BaseCatalogue:
 
 class FixtureCatalogue(_BaseCatalogue):
     origin = "fixture"
-    notice = FIXTURE_NOTICE
+    notice: str | None = FIXTURE_NOTICE
     watermark = SYNTHETIC_WATERMARK
 
     def __init__(self, store: FixtureStore, prep: PreprocessingConfig) -> None:
