@@ -38,9 +38,15 @@ def read_rsna_label_states(train_csv: Path, column_by_finding: dict[str, str]) -
             all_cols = [v for k, v in row.items() if k not in ("StudyInstanceUID", "Report")]
             labelled = any((v or "").strip() for v in all_cols)
             states[row["StudyInstanceUID"]] = {
-                f: ("not_labeled" if not labelled else
-                    "positive" if v in {"1", "1.0"} else
-                    "negative" if v in {"0", "0.0"} else "unknown")
+                f: (
+                    "not_labeled"
+                    if not labelled
+                    else "positive"
+                    if v in {"1", "1.0"}
+                    else "negative"
+                    if v in {"0", "0.0"}
+                    else "unknown"
+                )
                 for f, v in values.items()
             }
     return states
