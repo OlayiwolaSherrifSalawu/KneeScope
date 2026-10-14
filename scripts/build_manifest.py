@@ -37,19 +37,34 @@ def study_detail(adapter: RsnaAdapter, study_id: str, label: str, max_size: int)
         first = sorted((adapter.series_dir / study_id / ref.series_id).glob("*.dcm"))[0]
         ds = pydicom.dcmread(first, stop_before_pixels=True)
         width, height = rendered_size(int(ds.Rows), int(ds.Columns), max_size)
-        series.append({
-            "series_id": ref.series_id, "plane": ref.plane, "description": ref.description,
-            "num_slices": ref.num_slices, "slice_order": "patient_position",
-            "fluid_sensitive": ref.fluid_sensitive, "fat_suppressed": ref.fat_suppressed,
-            "rendered_width": width, "rendered_height": height,
-        })
+        series.append(
+            {
+                "series_id": ref.series_id,
+                "plane": ref.plane,
+                "description": ref.description,
+                "num_slices": ref.num_slices,
+                "slice_order": "patient_position",
+                "fluid_sensitive": ref.fluid_sensitive,
+                "fat_suppressed": ref.fat_suppressed,
+                "rendered_width": width,
+                "rendered_height": height,
+            }
+        )
     present = [p for p in ("sagittal", "coronal", "axial") if any(s["plane"] == p for s in series)]
-    return StudyDetail.model_validate({
-        "study_id": study_id, "display_label": label, "origin": "dataset",
-        "dataset_id": adapter.dataset_id, "planes_available": present,
-        "series_count": len(series), "analysis_status": "not_run", "series": series,
-        "missing_planes": [p.value for p in Plane if p.value not in present], "warnings": [],
-    })
+    return StudyDetail.model_validate(
+        {
+            "study_id": study_id,
+            "display_label": label,
+            "origin": "dataset",
+            "dataset_id": adapter.dataset_id,
+            "planes_available": present,
+            "series_count": len(series),
+            "analysis_status": "not_run",
+            "series": series,
+            "missing_planes": [p.value for p in Plane if p.value not in present],
+            "warnings": [],
+        }
+    )
 
 
 def main() -> int:
@@ -90,17 +105,33 @@ def main() -> int:
             reasons[s] = "complete study (seeded random pick from evaluation partitions)"
 
     cfg = load_preprocessing_config()
-    details = [study_detail(adapter, s, f"Demo study {i + 1}", cfg.render_max_size)
-               for i, s in enumerate(chosen)]
+    details = [
+        study_detail(adapter, s, f"Demo study {i + 1}", cfg.render_max_size) for i, s in enumerate(chosen)
+    ]
     args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(json.dumps({"studies": [d.model_dump(mode="json") for d in details]}, indent=2) + "\n",
-                        encoding="utf-8")
-    selection = {"seed": args.seed, "split_file": str(args.split_file),
-                 "studies": [{"display_label": d.display_label, "partition": partition[d.study_id],
-                              "reason": reasons[d.study_id]} for d in details]}
-    args.out.with_suffix(".selection.json").write_text(json.dumps(selection, indent=2) + "\n", encoding="utf-8")
-    print(f"manifest: {len(details)} studies -> {args.out}"
-          f"{'' if with_gap else ' (no missing-plane study available in evaluation partitions)'}")
+    args.out.write_text(
+        json.dumps({"studies": [d.model_dump(mode="json") for d in details]}, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    selection = {
+        "seed": args.seed,
+        "split_file": str(args.split_file),
+        "studies": [
+            {
+                "display_label": d.display_label,
+                "partition": partition[d.study_id],
+                "reason": reasons[d.study_id],
+            }
+            for d in details
+        ],
+    }
+    args.out.with_suffix(".selection.json").write_text(
+        json.dumps(selection, indent=2) + "\n", encoding="utf-8"
+    )
+    print(
+        f"manifest: {len(details)} studies -> {args.out}"
+        f"{'' if with_gap else ' (no missing-plane study available in evaluation partitions)'}"
+    )
     return 0
 
 
