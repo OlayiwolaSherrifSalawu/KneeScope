@@ -996,6 +996,78 @@ table.metrics td.undef {
   margin-bottom: 6px;
 }
 
+/* Study browser: tools, row links, card list (DESIGN.md sections 9.3, 15) */
+.page-tools {
+  display: flex;
+  align-items: center;
+  gap: var(--ks-space-2);
+  flex-wrap: wrap;
+}
+table.studies tbody tr.row-link {
+  cursor: pointer;
+}
+table.studies .open-cell {
+  color: var(--ks-lb-accent);
+}
+table.studies a:focus-visible,
+.study-card-link:focus-visible {
+  outline: 2px solid var(--ks-lb-focus);
+  outline-offset: 2px;
+}
+.study-cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.study-card {
+  padding: var(--ks-space-3) var(--ks-space-4);
+  border-bottom: 1px solid var(--ks-lb-line);
+}
+.study-card:last-child {
+  border-bottom: 0;
+}
+.study-card:hover {
+  background: var(--ks-lb-raised);
+}
+.study-card-link {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px var(--ks-space-3);
+  min-height: 32px;
+  align-items: center;
+  color: var(--ks-lb-accent);
+  overflow-wrap: anywhere;
+}
+.study-card-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--ks-space-2) var(--ks-space-4);
+  margin: var(--ks-space-2) 0 0;
+}
+.study-card-fields dt {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ks-lb-text-faint);
+}
+.study-card-fields dd {
+  margin: 0;
+}
+@media (max-width: 599px) {
+  .field {
+    min-width: 0;
+    width: 100%;
+  }
+  .page-tools {
+    width: 100%;
+    flex-wrap: nowrap;
+  }
+  .page-tools label {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
 /* Narrow widths: keep the app usable without horizontal page scroll (DESIGN.md section 15). */
 @media (max-width: 1199px) {
   .workspace {
@@ -1020,8 +1092,15 @@ table.metrics td.undef {
   }
   .topbar {
     flex-wrap: wrap;
-    padding: 8px 16px;
-    gap: 8px 16px;
+    padding: 8px 16px 0;
+    gap: 4px 16px;
+  }
+  /* A wrapped top bar has no fixed height, so the nav needs its own (DESIGN.md §15). */
+  .nav {
+    height: 40px;
+    order: 3;
+    flex-basis: 100%;
+    margin-left: calc(-1 * var(--ks-space-3));
   }
   .footer {
     flex-wrap: wrap;
