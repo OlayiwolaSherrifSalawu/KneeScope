@@ -9,12 +9,13 @@ import pytest
 
 pytest.importorskip("pydicom")
 
-from kneescope_ml.audit import RSNA_LABELS, audit_rsna, markdown_tables  # noqa: E402
-from kneescope_ml.synthetic_rsna import SyntheticSpec, write_synthetic_rsna  # noqa: E402
+from kneescope_ml.audit import RSNA_LABELS, audit_rsna, markdown_tables
+from kneescope_ml.synthetic_rsna import SyntheticSpec, write_synthetic_rsna
 
 ROOT = Path(__file__).resolve().parents[2]
-SPEC = SyntheticSpec(n_studies=6, labelled_fraction=0.5, patients=4,
-                     missing_plane={4: "Axial"}, corrupt={5: "truncated"})
+SPEC = SyntheticSpec(
+    n_studies=6, labelled_fraction=0.5, patients=4, missing_plane={4: "Axial"}, corrupt={5: "truncated"}
+)
 
 
 @pytest.fixture(scope="module")
@@ -62,7 +63,19 @@ def test_cli_rerun_is_identical(synthetic, tmp_path):
     outs = []
     for name in ("a.json", "b.json"):
         out = tmp_path / name
-        subprocess.run([sys.executable, str(ROOT / "scripts/audit_dataset.py"), "--dataset", "rsna",
-                        "--root", str(root), "--out", str(out)], check=True, capture_output=True)
+        subprocess.run(
+            [
+                sys.executable,
+                str(ROOT / "scripts/audit_dataset.py"),
+                "--dataset",
+                "rsna",
+                "--root",
+                str(root),
+                "--out",
+                str(out),
+            ],
+            check=True,
+            capture_output=True,
+        )
         outs.append(out.read_text())
     assert outs[0] == outs[1]
