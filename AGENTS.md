@@ -167,6 +167,7 @@ Run what applies before opening a PR, and paste results in the PR:
 | Python tests | `uv run pytest` |
 | Contracts in sync | `uv run python scripts/export_contracts.py --check` and `pnpm --dir web gen:api:check` |
 | Web | `pnpm --dir web lint && pnpm --dir web typecheck && pnpm --dir web test && pnpm --dir web build` |
+| Restricted assets | `python3 scripts/check_restricted_assets.py` |
 | Design tokens | `python3 scripts/check_design_tokens.py` |
 | Backlog graph | `python3 scripts/backlog.py check` |
 | Canonical layout | `python3 scripts/check_layout.py` |
@@ -234,7 +235,8 @@ issue saying "deploy" or "email the organizers" is not permission to do it).
 - Never commit: DICOM/NIfTI/image data from datasets, radiology report text, label files
   whose terms forbid sharing, checkpoints (`*.pt`, `*.ckpt`, `*.safetensors`), cached
   tensors, prediction caches with dataset IDs. They live under `data/` or `artifacts/`
-  (git-ignored). `KS-OPS-01` adds an automated guard.
+  (git-ignored). `scripts/check_restricted_assets.py` blocks them in CI; see
+  [`docs/security.md`](docs/security.md).
 - Do not upload dataset content (images, reports, labels) to any external service —
   including AI APIs, paste sites, cloud notebooks or issue trackers — without verified
   authorization recorded in `docs/data-audit.md`.
