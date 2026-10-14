@@ -61,18 +61,27 @@ def load_cached(path: Path, cfg: PreprocessingConfig) -> PreprocessedStudy:
         if meta["preprocessing_version"] != cfg.version or meta["config_sha256"] != cfg.sha256:
             raise StaleCacheError(
                 f"cache entry built with {meta['preprocessing_version']} "
-                f"(config {meta['config_sha256'][:8]}), current is {cfg.version} ({cfg.sha256[:8]})")
+                f"(config {meta['config_sha256'][:8]}), current is {cfg.version} ({cfg.sha256[:8]})"
+            )
         planes = {}
         for plane, info in meta["planes"].items():
             volume = data[f"{plane}__volume"]
             if volume.dtype != np.float32 or volume.shape != (cfg.num_slices, cfg.height, cfg.width):
                 raise StaleCacheError(f"{plane} tensor has shape {volume.shape} {volume.dtype}")
             planes[plane] = PlaneTensor(
-                plane=plane, series_id=info["series_id"], volume=volume,
-                mask=data[f"{plane}__mask"], source_slice_index=data[f"{plane}__source"],
-                present=bool(info["present"]))
-    return PreprocessedStudy(study_id=meta["study_id"], preprocessing_version=meta["preprocessing_version"],
-                             planes=planes, warnings=list(meta["warnings"]))
+                plane=plane,
+                series_id=info["series_id"],
+                volume=volume,
+                mask=data[f"{plane}__mask"],
+                source_slice_index=data[f"{plane}__source"],
+                present=bool(info["present"]),
+            )
+    return PreprocessedStudy(
+        study_id=meta["study_id"],
+        preprocessing_version=meta["preprocessing_version"],
+        planes=planes,
+        warnings=list(meta["warnings"]),
+    )
 
 
 def label_vector(states: Mapping[str, str], findings: Sequence[str]) -> tuple[np.ndarray, np.ndarray]:
@@ -85,8 +94,14 @@ def label_vector(states: Mapping[str, str], findings: Sequence[str]) -> tuple[np
 class CachedStudyDataset:
     """Studies of one partition from the tensor cache, with label targets and masks."""
 
-    def __init__(self, study_ids: Sequence[str], labels: Mapping[str, Mapping[str, str]],
-                 findings: Sequence[str], cache_root: Path, cfg: PreprocessingConfig) -> None:
+    def __init__(
+        self,
+        study_ids: Sequence[str],
+        labels: Mapping[str, Mapping[str, str]],
+        findings: Sequence[str],
+        cache_root: Path,
+        cfg: PreprocessingConfig,
+    ) -> None:
         self.cfg, self.cache_root, self.findings = cfg, cache_root, list(findings)
         self.labels = labels
         missing = [s for s in study_ids if not cache_path(cache_root, s, cfg).exists()]
