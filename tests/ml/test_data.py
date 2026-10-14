@@ -50,8 +50,10 @@ def test_entry_from_another_preprocessing_version_is_rejected(tmp_path):
 
 
 def test_unknown_labels_are_masked_not_negative():
-    y, known = label_vector({"acl": "positive", "mcl": "unknown", "medial_meniscus": "negative"},
-                            ["acl", "mcl", "medial_meniscus", "lateral_meniscus"])
+    y, known = label_vector(
+        {"acl": "positive", "mcl": "unknown", "medial_meniscus": "negative"},
+        ["acl", "mcl", "medial_meniscus", "lateral_meniscus"],
+    )
     assert y.tolist() == [1.0, 0.0, 0.0, 0.0]
     assert known.tolist() == [True, False, True, False]
 
@@ -59,9 +61,10 @@ def test_unknown_labels_are_masked_not_negative():
 def test_dataset_yields_contract_shapes_and_requires_cache(tmp_path):
     study = preprocessed()
     write_cached(study, tmp_path, CFG)
-    ds = CachedStudyDataset([study.study_id], {study.study_id: {"acl": "negative"}}, ["acl", "mcl"],
-                            tmp_path, CFG)
-    pre, y, known = ds[0]
+    ds = CachedStudyDataset(
+        [study.study_id], {study.study_id: {"acl": "negative"}}, ["acl", "mcl"], tmp_path, CFG
+    )
+    pre, _y, known = ds[0]
     assert len(ds) == 1 and pre.planes["sagittal"].volume.shape == (CFG.num_slices, CFG.height, CFG.width)
     assert known.tolist() == [True, False]
     with pytest.raises(FileNotFoundError):
@@ -80,8 +83,20 @@ def test_cli_builds_partition_resumes_and_skips_corrupt(tmp_path):
         w.writerow(["study_id", "partition", "group_hash"])
         for i, s in enumerate(studies):
             w.writerow([s, "validation" if i == 0 else "train", "x"])
-    cmd = [sys.executable, str(ROOT / "scripts/cache_tensors.py"), "--dataset", "rsna", "--root", str(data),
-           "--split-file", str(split), "--partition", "train", "--out", str(tmp_path / "cache")]
+    cmd = [
+        sys.executable,
+        str(ROOT / "scripts/cache_tensors.py"),
+        "--dataset",
+        "rsna",
+        "--root",
+        str(data),
+        "--split-file",
+        str(split),
+        "--partition",
+        "train",
+        "--out",
+        str(tmp_path / "cache"),
+    ]
     first = subprocess.run(cmd, capture_output=True, text=True, check=True).stdout
     assert "2 built, 0 already valid, 1 failed" in first and "studies/s" in first
     assert studies[3] not in first  # failures are reported by index, not UID
