@@ -50,7 +50,7 @@ def write_cached(study: PreprocessedStudy, cache_root: Path, cfg: PreprocessingC
         "warnings": study.warnings,
     }
     tmp = path.with_suffix(".tmp.npz")
-    np.savez_compressed(tmp, __meta__=np.array(json.dumps(meta)), **arrays)
+    np.savez_compressed(tmp, __meta__=np.array(json.dumps(meta)), **arrays)  # type: ignore[arg-type]
     tmp.replace(path)  # atomic: an interrupted write never leaves a valid-looking entry
     return path
 
