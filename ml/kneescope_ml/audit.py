@@ -85,8 +85,8 @@ def audit_rsna(root: Path, *, header_sample_per_series: int = 1,
                 except Exception:  # noqa: BLE001 - any read failure is counted, not raised
                     unreadable_headers += 1
                     continue
-                syntaxes[str(getattr(ds.file_meta, "TransferSyntaxUID", "unknown").name
-                             if hasattr(ds, "file_meta") else "unknown")] += 1
+                ts = getattr(getattr(ds, "file_meta", None), "TransferSyntaxUID", None)
+                syntaxes[ts.name if ts is not None else "unknown"] += 1
                 for field in GROUPING_FIELDS:
                     value = getattr(ds, field, None)
                     if value not in (None, ""):
