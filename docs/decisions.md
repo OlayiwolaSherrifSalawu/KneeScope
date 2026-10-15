@@ -108,6 +108,20 @@ entries may supersede earlier ones explicitly. Decisions still open are listed a
   outside `api/`. AGENTS.md §2a lists where everything goes.
 - **Supersedes:** the "Open" part of D-011.
 
+## D-013 — 2026-10-15 — Freeze preprocessing prep-1.0.0
+- **Decision:** `config/preprocessing.toml` is frozen as `prep-1.0.0` (status `frozen`). Only
+  `version` and `status` changed from the placeholder. File SHA-256: `0daa9e6a7fd9f1796e074e42d09e26e5910791903f5b3520ed0246fe2265f4e1`. Decided by
+  Olayiwola (M1, data) after reviewing six preprocessing inspection sheets on RSNA data
+  (no problems found).
+- **Why:** KS-DATA-07 asks for frozen preprocessing before training, so M2 trains on one
+  cache and evaluation matches. Cache entries record the config hash and `load_cached`
+  rejects any mismatch.
+- **Consequences:** The tensor cache for the 58 labelled RSNA studies was built from `main`
+  at 41a4a85 with this config (58 built, 0 failed) and all 58 entries load through
+  `load_cached`. Any later change to the file changes its hash, invalidates every cache
+  entry and cached prediction, and needs a new version and a new entry here. The cache is
+  not in git (D-007) and goes only to RSNA participants who accepted the Rules.
+
 ## Open decisions
 
 | Decision | Evidence required | Issue |
