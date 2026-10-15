@@ -174,7 +174,9 @@ def create_app(
 
     @app.post("/predictions", response_model=PredictionResponse, responses=ERRORS, tags=["predictions"])
     def predict(body: PredictionRequest, state: State) -> PredictionResponse:
-        if settings.mode == "fixture":
+        # Read the mode from state (not the closure) like every other route, so the
+        # settings object on the app is the single source of truth (KS-DATA-01 CI fix).
+        if state.settings.mode == "fixture":
             return fixture_prediction(
                 state.store, body.study_id, body.findings, settings.finding_profile, model_cfg, prep_cfg
             )
