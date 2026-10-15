@@ -1,4 +1,15 @@
 {
-  "closed": [],
+  "closed": [
+    "KS-API-01",
+    "KS-EVAL-01",
+    "KS-MODEL-02",
+    "KS-OPS-01",
+    "KS-WEB-01",
+    "KS-WEB-02",
+    "KS-WEB-03",
+    "KS-WEB-04",
+    "KS-WEB-05",
+    "KS-WEB-06"
+  ],
   "triggered": {}
 }
