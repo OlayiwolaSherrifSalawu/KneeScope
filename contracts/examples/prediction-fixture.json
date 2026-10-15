@@ -84,8 +84,8 @@
     },
     "prediction_id": "fx-pred-fx-study-001-interaction_prototype",
     "preprocessing": {
-      "config_sha256": "0c6860b384638476c63657fdf2ba80ce3405e444e37169bd696b8a65ede5fe12",
-      "version": "prep-0.0.0-placeholder"
+      "config_sha256": "0daa9e6a7fd9f1796e074e42d09e26e5910791903f5b3520ed0246fe2265f4e1",
+      "version": "prep-1.0.0"
     },
     "provenance": {
       "cache_key": null,

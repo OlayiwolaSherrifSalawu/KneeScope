@@ -5,7 +5,7 @@
     "mode": "fixture",
     "model_loaded": false,
     "model_version": null,
-    "preprocessing_version": "prep-0.0.0-placeholder",
+    "preprocessing_version": "prep-1.0.0",
     "schema_version": "0.1.0",
     "status": "ok"
   },
