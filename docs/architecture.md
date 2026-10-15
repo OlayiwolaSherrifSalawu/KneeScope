@@ -13,7 +13,7 @@ knee-scope/
 ├── config/     preprocessing.toml, model.toml (versions, placeholders)
 ├── scripts/    dev, verify, export contracts, backlog, design-token check
 ├── tests/      contract, API, ML, label-isolation tests (+ e2e later)
-├── docs/       design, architecture, decisions, data audit, model card, issues
+├── docs/       design, architecture, api reference, decisions, data audit, model card, issues
 ├── data/       (git-ignored) local dataset copies
 └── artifacts/  (git-ignored) caches, runs, checkpoints, manifests, metrics
 ```
@@ -26,7 +26,7 @@ knee-scope/
 | Data loading | Dataset adapter per dataset; pydicom (+ JPEG decoders) only where needed | `DatasetAdapter` protocol |
 | Preprocessing | `kneescope_ml.preprocess.preprocess_study` | **The only implementation**; versioned by `config/preprocessing.toml` |
 | Slice rendering | `kneescope_ml.render.render_slice_png` | Display mapping, not window/level |
-| Backend | FastAPI (`kneescope_api`) | Fixture mode now; model mode via backlog |
+| Backend | FastAPI (`kneescope_api`) | Fixture mode now; model mode via backlog. Endpoint reference: [`docs/api.md`](api.md) |
 | Frontend | React, TypeScript, Vite, Tailwind | Canvas viewer with server-rendered slices |
 | Contracts | Pydantic → JSON Schema/OpenAPI → TS types | Drift checked in CI |
 | Packaging | `uv` lockfile + `pnpm` lockfile; container in `KS-OPS-02` | |
