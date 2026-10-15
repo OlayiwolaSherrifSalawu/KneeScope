@@ -34,6 +34,6 @@ def test_inference_side_never_imports_labels():
         assert not any("labels" in m for m in mods), f"{rel} imports a labels module"
 
 
-def test_prediction_function_never_reads_label_store():
-    src = inspect.getsource(service.fixture_prediction)
-    assert "labels" not in src
+def test_prediction_functions_never_read_label_store():
+    for fn in (service.fixture_prediction, service.model_prediction):
+        assert "labels" not in inspect.getsource(fn), f"{fn.__name__} touches labels"

@@ -71,10 +71,28 @@ client `X-Request-ID` support, the Makefile, Docker setup and pre-commit hooks.
 | Mode | How | Results |
 |---|---|---|
 | Fixture | `KNEESCOPE_MODE=fixture` (default) | Synthetic studies; `FIXTURE — not a model output` |
-| Model | `KNEESCOPE_MODE=model` + `KNEESCOPE_MANIFEST` + `KNEESCOPE_DATA_ROOT` | Dataset studies and slices from the manifest; inference still `503 MODEL_NOT_LOADED` (KS-API-02) |
-| Cached | Planned (KS-API-04) | `CACHED` with original timestamp and checkpoint |
+| Model | `KNEESCOPE_MODE=model` + `KNEESCOPE_MANIFEST` + `KNEESCOPE_DATA_ROOT` + a checkpoint whose SHA-256 is pinned in `config/model.toml` | Dataset studies and slices from the manifest; `POST /predictions` runs live inference through the shared preprocessing |
+| Cached | Model mode + entries from `scripts/precompute_predictions.py` (default `allow_cached: true`) | `source: "cached"` with the original `computed_at`, the `cache_key` and the producing checkpoint; `latency_ms` is dropped. `allow_cached: false` forces a live run |
 
 Heavy ML dependencies (torch, pydicom, scikit-learn) install with `uv sync --extra ml`.
+
+### Cached mode
+
+The demo needs a fallback that works without live inference, but cached results must
+never look fresh. `scripts/precompute_predictions.py` runs the API's live prediction
+path once per manifest study, stores each result under the configured
+`serving.cache_dir` (`config/model.toml`) and verifies every entry round-trips:
+
+```bash
+python scripts/precompute_predictions.py --manifest artifacts/manifest/studies.json
+```
+
+Cache keys include study, model version, checkpoint SHA-256, preprocessing version and
+finding profile: regenerate after any of them changes — a stale key is a cache miss by
+design. The API serves entries with `source: "cached"`, the original `computed_at` and
+the `cache_key`; entries that fail contract validation are ignored and logged by key
+only (`tests/api/test_cache_roundtrip.py`). The offline walkthrough is in
+[`docs/demo-script.md`](docs/demo-script.md).
 
 ## Data and model artifacts
 

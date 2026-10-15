@@ -42,7 +42,8 @@ jobs:
         with:
           python-version: "3.12"
       - run: uv sync --frozen --extra ml
-      - run: uv run pytest tests/ml
+      - name: Training/ML tests and the cached-prediction round-trip (needs torch)
+        run: uv run pytest tests/ml tests/api/test_cache_roundtrip.py
 
   web:
     runs-on: ubuntu-latest

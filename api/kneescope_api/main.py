@@ -15,9 +15,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 
 from kneescope_api import API_VERSION
+from kneescope_api.cache import PredictionCache
 from kneescope_api.catalogue import DatasetCatalogue, FixtureCatalogue, StudyCatalogue
 from kneescope_api.errors import ApiException, install_error_handlers
-from kneescope_api.service import fixture_explanation, fixture_labels, fixture_prediction
+from kneescope_api.service import fixture_explanation, fixture_labels, fixture_prediction, model_prediction
 from kneescope_api.settings import Settings, load_settings
 from kneescope_api.store import FixtureStore
 from kneescope_contracts.findings import load_profile
@@ -37,6 +38,7 @@ from kneescope_contracts.models import (
     StudyList,
 )
 from kneescope_ml.config import ModelConfig, PreprocessingConfig, load_model_config, load_preprocessing_config
+from kneescope_ml.inference import ModelNotAvailableError, Predictor, load_predictor
 
 ERRORS: dict[int | str, dict[str, Any]] = {code: {"model": ApiError} for code in (404, 422, 500, 503)}
 StudyId = Annotated[str, Path(pattern=r"^[A-Za-z0-9._-]{1,128}$")]
@@ -51,6 +53,8 @@ class AppState:
     catalogue: StudyCatalogue
     model_cfg: ModelConfig
     prep_cfg: PreprocessingConfig
+    predictor: Predictor | None = None
+    cache: PredictionCache | None = None
 
 
 def get_state(request: Request) -> AppState:
@@ -59,7 +63,7 @@ def get_state(request: Request) -> AppState:
 
 
 def require_fixture_mode(request: Request) -> AppState:
-    """Inference, labels and evaluation are fixture-only until KS-API-02/05. Fail loudly."""
+    """Labels and evaluation are fixture-only until KS-API-05. Fail loudly."""
     state = get_state(request)
     if state.settings.mode != "fixture":
         raise ApiException(
@@ -75,16 +79,28 @@ State = Annotated[AppState, Depends(get_state)]
 FixtureState = Annotated[AppState, Depends(require_fixture_mode)]
 
 
-def create_app(settings: Settings | None = None) -> FastAPI:
+def create_app(
+    settings: Settings | None = None,
+    *,
+    model_cfg: ModelConfig | None = None,
+    prep_cfg: PreprocessingConfig | None = None,
+) -> FastAPI:
     settings = settings or load_settings()
     logging.basicConfig(level=settings.log_level.upper())
     load_profile(settings.finding_profile)  # fail fast on an unknown profile
-    model_cfg, prep_cfg = load_model_config(), load_preprocessing_config()
+    model_cfg, prep_cfg = model_cfg or load_model_config(), prep_cfg or load_preprocessing_config()
     store = FixtureStore()
     catalogue: StudyCatalogue
+    predictor: Predictor | None = None
+    cache: PredictionCache | None = None
     if settings.mode == "model":
         assert settings.manifest is not None and settings.data_root is not None
         catalogue = DatasetCatalogue(settings.manifest, settings.data_root, prep_cfg)
+        cache = PredictionCache(model_cfg.cache_dir)
+        try:
+            predictor = load_predictor(model_cfg)
+        except ModelNotAvailableError as exc:
+            logging.getLogger(__name__).warning("model mode has no usable checkpoint: %s", exc)
     else:
         catalogue = FixtureCatalogue(store, prep_cfg)
 
@@ -102,7 +118,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         expose_headers=["X-Request-ID"],
     )
     install_error_handlers(app)
-    app.state.ks = AppState(settings, store, catalogue, model_cfg, prep_cfg)
+    app.state.ks = AppState(settings, store, catalogue, model_cfg, prep_cfg, predictor, cache)
 
     @app.get("/healthz", response_model=Health, tags=["service"])
     def healthz() -> Health:
@@ -110,8 +126,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             status="ok",
             api_version=API_VERSION,
             mode=settings.mode,
-            model_loaded=False,
-            model_version=None,
+            model_loaded=predictor is not None,
+            model_version=predictor.model_version if predictor is not None else None,
             preprocessing_version=prep_cfg.version,
             finding_profile=settings.finding_profile,
         )
@@ -157,9 +173,38 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         )
 
     @app.post("/predictions", response_model=PredictionResponse, responses=ERRORS, tags=["predictions"])
-    def predict(body: PredictionRequest, state: FixtureState) -> PredictionResponse:
-        return fixture_prediction(
-            state.store, body.study_id, body.findings, settings.finding_profile, model_cfg, prep_cfg
+    def predict(body: PredictionRequest, state: State) -> PredictionResponse:
+        if settings.mode == "fixture":
+            return fixture_prediction(
+                state.store, body.study_id, body.findings, settings.finding_profile, model_cfg, prep_cfg
+            )
+        if state.predictor is None or state.cache is None:
+            raise ApiException(
+                503,
+                ErrorCode.MODEL_NOT_LOADED,
+                "Model mode has no usable checkpoint; set checkpoint_path and checkpoint_sha256 "
+                "in config/model.toml.",
+                retryable=False,
+            )
+        if body.allow_cached:
+            key = PredictionCache.key(
+                study_id=body.study_id,
+                model_version=state.predictor.model_version,
+                checkpoint_sha256=state.predictor.checkpoint_sha256,
+                preprocessing_version=prep_cfg.version,
+                finding_profile=settings.finding_profile,
+            )
+            hit = state.cache.get(key, study_id=body.study_id, findings=body.findings)
+            if hit is not None:
+                return hit
+        return model_prediction(
+            state.catalogue,
+            state.predictor,
+            body.study_id,
+            body.findings,
+            settings.finding_profile,
+            model_cfg,
+            prep_cfg,
         )
 
     @app.get(

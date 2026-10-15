@@ -20,6 +20,7 @@ from typing import Protocol
 from kneescope_api.errors import ApiException
 from kneescope_api.store import FixtureStore
 from kneescope_contracts.models import ErrorCode, StudyDetail, StudySummary
+from kneescope_ml.adapters.base import DatasetAdapter
 from kneescope_ml.adapters.fixture import FixtureAdapter
 from kneescope_ml.config import PreprocessingConfig
 from kneescope_ml.preprocess import PreprocessingError
@@ -57,11 +58,14 @@ class StudyCatalogue(Protocol):
 
     def slice_png(self, study_id: str, series_id: str, index: int) -> bytes: ...
 
+    def load_volumes(self, study_id: str) -> dict[str, SeriesVolume]: ...
+
 
 class _BaseCatalogue:
     origin = "dataset"
     notice: str | None = None
     watermark: str | None = None
+    _adapter: DatasetAdapter
 
     def __init__(self, studies: dict[str, StudyDetail], prep: PreprocessingConfig) -> None:
         self._studies, self._prep = studies, prep
@@ -113,6 +117,25 @@ class _BaseCatalogue:
         png = render_slice_png(volume, index, self._prep, watermark=self.watermark)
         self._pngs.put((study_id, series_id, index), png)
         return png
+
+    def load_volumes(self, study_id: str) -> dict[str, SeriesVolume]:
+        """The one selected series per plane, for the model path (KS-API-02).
+
+        Study ids and existence are already validated by ``detail``. Any load failure
+        is surfaced as a structured 422 with a reviewer-safe message.
+        """
+        self.detail(study_id)
+        volumes: dict[str, SeriesVolume] = {}
+        for plane, ref in self._adapter.select_series(study_id).items():
+            try:
+                volumes[plane] = self._load(study_id, ref.series_id)
+            except PreprocessingError as exc:  # message is reviewer-safe by contract
+                raise ApiException(422, ErrorCode.PREPROCESSING_FAILED, str(exc)) from None
+            except OSError:
+                raise ApiException(
+                    422, ErrorCode.PREPROCESSING_FAILED, "Series files could not be read."
+                ) from None
+        return volumes
 
     def _load(self, study_id: str, series_id: str) -> SeriesVolume:
         raise NotImplementedError
