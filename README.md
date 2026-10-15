@@ -22,8 +22,9 @@ pnpm --dir web install        # web deps
 scripts/dev.sh                # API on :8000 (fixture mode) + web on :5173
 ```
 
-Open http://localhost:5173. API docs: http://localhost:8000/docs. Health:
-`curl localhost:8000/healthz`.
+Open http://localhost:5173. Interactive API docs: http://localhost:8000/docs. Health:
+`curl localhost:8000/healthz`. The frontend-facing endpoint reference (every endpoint,
+errors, which component calls what) is [`docs/api.md`](docs/api.md).
 
 Run only the API: `scripts/dev-api.sh`. Configuration: copy `.env.example` to `.env`
 (names only; never put secrets in the repository).
@@ -52,6 +53,7 @@ mypy, pytest, contract drift check, and web lint/typecheck/format/test/build. CI
 | `config/` | `preprocessing.toml`, `model.toml` — version placeholders |
 | `scripts/` | Dev, verification, contract export, backlog tools |
 | `tests/` | Contract, API, preprocessing and label-isolation tests |
+| [`docs/api.md`](docs/api.md) | API reference for the frontend UI — all endpoints, error codes, UI mapping |
 | [`docs/architecture.md`](docs/architecture.md) | System design, run modes, request flow |
 | [`docs/decisions.md`](docs/decisions.md) | Decision log and open decisions |
 | [`docs/issue-index.md`](docs/issue-index.md) | Backlog overview, first ready issues, critical path |

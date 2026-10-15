@@ -122,6 +122,25 @@ entries may supersede earlier ones explicitly. Decisions still open are listed a
   entry and cached prediction, and needs a new version and a new entry here. The cache is
   not in git (D-007) and goes only to RSNA participants who accepted the Rules.
 
+## D-014 — 2026-10-15 — RSNA permitted-use verdicts recorded; unclear stays not permitted (KS-DATA-01)
+- **Decision:** `docs/data-audit.md` §1 answers all six RSNA uses: training and
+  evaluation **yes** (Rules §4a, research use under the MIRA license); public hosting of
+  rendered slices **no** (Rules §4b, corroborated 2026-10-15 by the indexed Rules page and
+  Kaggle discussion 733873); local demo to judges, recordings and model-weight
+  publication **unclear → not permitted** until drafted questions 2–4 are answered. The
+  members list records the six team members' confirmations to M1 (2026-10-15). No data
+  downloaded: read in place (§2); subset fetch awaits the Kaggle file listing.
+- **Why:** §4b forbids making Competition Data available to non-participants; MIRA
+  excerpts (research-only, no distribution, no derivatives) are indexed from the official
+  PDF but unverified against it, so weight publication stays unclear. AGENTS.md §14 and
+  the issue's exclusions forbid agents accepting terms, signing in or contacting
+  providers, so the questions stay drafted for the coordinator.
+- **Consequences:** hosting and recordings stay unavailable to demo planning
+  (KS-OPS-05, KS-DEMO-03) until answered; KS-DATA-02 fills the MRNet and organizer
+  columns; KS-DATA-01 still needs its coordinator + one-member table review before
+  closing, and a member must confirm the MIRA PDF excerpts and run the file listing.
+- **By:** Codebuff (agent) on behalf of the data workstream, 2026-10-15.
+
 ## Open decisions
 
 | Decision | Evidence required | Issue |

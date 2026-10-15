@@ -1,13 +1,19 @@
 # Data audit — TEMPLATE
 
-> **Status: template, partially pre-filled from public pages only.** No data has been
-> downloaded or inspected. Sections marked `<…>` are filled by KS-DATA-01/02/03/08/10.
-> Never put study UIDs, patient information or report text in this file — counts only.
+> **Status: TEMPLATE — partially filled.** §1 (RSNA) completed 2026-10-15 under
+> KS-DATA-01; §2–§6 pre-filled from the 2026-10-15 in-place audit (second-person
+> verification still due). Sections marked `<…>` are filled by KS-DATA-02. No data has
+> been downloaded to this repository (read in place — §2). Never put study UIDs, patient
+> information or report text in this file — counts only.
 
 ## 1. Access and permitted use
 
 Facts below were read from the public Kaggle competition pages on 2026-10-13 (Overview,
-Data, Rules). They are not legal advice; quote clauses when filling the table.
+Data, Rules); MIRA license excerpts, Kaggle CLI references and §4b corroboration were
+added 2026-10-15. They are not legal advice; every RSNA verdict below quotes a clause or
+names a pending question. The MIRA PDF (rsna.org/mira-license) could not be fetched
+directly (PDF-only), so its excerpts come from the search index of the official PDF and
+must be verified against the PDF by a member.
 
 **RSNA Knee Abnormality Detection (Kaggle, 2026)** — public facts:
 - 12 per-study binary labels: ACL, MCL, Medial Meniscus, Lateral Meniscus, Medial OA,
@@ -26,19 +32,38 @@ Data, Rules). They are not legal advice; quote clauses when filling the table.
   any party not participating in the Competition".
 - Entry deadline (rules acceptance): 15 October 2026, 23:59 UTC. Final submission
   deadline 22 October 2026 (not relevant to KneeScope, which is not a submission).
+- MIRA license (rsna.org/mira-license → `RSNA-MIRA-Dataset-License-2025.pdf`; indexed
+  excerpts read 2026-10-15, verify against the PDF): "Permission is granted to view and
+  use MIRA datasets without charge for research purposes only"; "use of the data for
+  research to produce or manufacture products for sale is allowed", while "any other
+  commercial use, sale, or other monetization is prohibited"; users must not "copy,
+  reproduce, retransmit, distribute, publish, commercially exploit or otherwise transfer
+  any material", and must not "modify, reverse engineer, decompile, or create derivative
+  works". Whether trained weights are a derivative is not addressed → question 4.
+- §4b corroboration (2026-10-15): the indexed official Rules page and Kaggle discussion
+  post 733873 both quote the same "transmit, duplicate, publish, redistribute …" clause.
 
 | Use | RSNA | MRNet | Organizer data |
 |---|---|---|---|
-| Training | `<yes/no/unclear + clause>` | `<…>` | `<…>` |
-| Evaluation | `<…>` | `<…>` | `<…>` |
-| Local demo to judges | `<…>` | `<…>` | `<…>` |
-| Public hosting of rendered slices | `<…>` (see §4b) | `<…>` | `<…>` |
-| Recorded video showing slices | `<…>` | `<…>` | `<…>` |
-| Publishing model weights | `<…>` | `<…>` | `<…>` |
-| Members who accepted terms (names only) | all six team members confirmed to M1 in the team chat on 15 Oct 2026; names to be listed under KS-SCOPE-02 | `<…>` | `<…>` |
-| Agreement / access status | `<…>` | `<not requested / requested / approved>` | `<offered?>` |
+| Training | **yes** — Rules §4a: data may be used "for any purpose, whether commercial or non-commercial … and for academic research and education", subject to the MIRA license ("research purposes only", indexed excerpt 2026-10-15). Training KneeScope is research use | `<…>` | `<…>` |
+| Evaluation | **yes** — same §4a/MIRA basis; evaluation stays on team machines, nothing is transferred to non-participants | `<…>` | `<…>` |
+| Local demo to judges | **unclear** — Rules §4b: participants must not "transmit, duplicate, publish, redistribute or otherwise provide or make available the Competition Data to any party not participating in the Competition". Whether a live local demo to non-participating judges counts is unanswered → pending question 2; treated as not permitted until answered | `<…>` | `<…>` |
+| Public hosting of rendered slices | **no** — §4b (quoted above) forbids making Competition Data available to non-participants, and rendered slices derive from it; MIRA also bars any "copy, reproduce … distribute, publish … or otherwise transfer" (indexed excerpt 2026-10-15). Standing rule: unclear defaults to not permitted | `<…>` | `<…>` |
+| Recorded video showing slices | **unclear → not permitted until answered** — a recording shared beyond participants engages §4b and the MIRA no-distribution excerpt → pending question 3 | `<…>` | `<…>` |
+| Publishing model weights | **unclear → not permitted until answered** — MIRA does not say whether trained weights are a "derivative work"; an indexed Rules fragment ("The model weights should be provided as a public kaggle dataset …", context unverified, possibly winners only) is not a permission grant → pending question 4 | `<…>` | `<…>` |
+| Members who accepted terms (names only) | All six team members confirmed to M1 (data lead) in the team chat on 15 Oct 2026: @anasabubakar, @DaviStyle, @Ijhay-stars, @JesuYiwola, @mfon9, @okeowovictor (handles; display names under KS-SCOPE-02). Acceptance is personal to each member's Kaggle account; no credentials are recorded here | `<…>` | `<…>` |
+| Agreement / access status | Rules accepted by all six (row above) before the entry deadline 15 Oct 2026 23:59 UTC; Rules read 2026-10-13 and 2026-10-15; data read in place in a Kaggle notebook on 2026-10-15, nothing downloaded locally (§2) | `<not requested / requested / approved>` | `<offered?>` |
 
 Unclear items default to **not permitted** for hosting and recordings until answered.
+
+#### Download feasibility (recorded 2026-10-15)
+
+- **Full download:** ~570 GB, ~820k DICOM files (secondary write-ups: github.com/VihaanGopee/rsna-knee-abnormality-detection and huggingface.co/blog/bishnoiyash/rsna-competetion; the official size shows on the logged-in data page). Not downloaded to any team machine.
+- **Access so far:** read in place in a Kaggle notebook — evidence: the §2 table, "read in place in a Kaggle notebook, 2026-10-15; not downloaded". Largest local artifact: the 865 MB tensor cache for the 58 labelled studies (§2).
+- **Layout:** `train.csv` (one row per study) plus `train_series/<StudyInstanceUID>/<SeriesInstanceUID>/<SOPInstanceUID>.dcm`, from the competition Data page description (read 2026-10-15). The often-repeated "one `train_<study_id>.zip` per study" packaging is **not confirmed**.
+- **Subset download:** `kaggle competitions files <competition>` lists published files and `kaggle competitions download <competition> -f <FILE_NAME>` fetches one of them (official CLI docs: github.com/Kaggle/kaggle-cli/blob/main/docs/competitions.md, read 2026-10-15). This proves file-level granularity only — if studies are packed inside one archive, the CLI cannot select inside it.
+- **Confirming command (run by a signed-in member):** `kaggle competitions files rsna-knee-abnormality-detection` — the listing decides whether a per-study subset is fetchable. Agents must not run it (AGENTS.md §14: no sign-in, no downloads on anyone's behalf).
+- **Feasibility statement:** a full 570 GB download is not planned; in-place access plus derived caches is the current path; per-study subset download is pending the file listing above.
 
 ### Draft questions for the data providers (not sent)
 
