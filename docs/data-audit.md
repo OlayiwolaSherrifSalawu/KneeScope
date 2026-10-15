@@ -35,7 +35,7 @@ Data, Rules). They are not legal advice; quote clauses when filling the table.
 | Public hosting of rendered slices | `<…>` (see §4b) | `<…>` | `<…>` |
 | Recorded video showing slices | `<…>` | `<…>` | `<…>` |
 | Publishing model weights | `<…>` | `<…>` | `<…>` |
-| Members who accepted terms (names only) | `<…>` | `<…>` | `<…>` |
+| Members who accepted terms (names only) | all six team members confirmed to M1 in the team chat on 15 Oct 2026; names to be listed under KS-SCOPE-02 | `<…>` | `<…>` |
 | Agreement / access status | `<…>` | `<not requested / requested / approved>` | `<offered?>` |
 
 Unclear items default to **not permitted** for hosting and recordings until answered.
@@ -72,19 +72,30 @@ subset; the JSON must be identical.
 
 | Item | Value |
 |---|---|
-| Dataset / version / download date | `<…>` |
-| Studies (total / labelled) | `<…>` |
-| Series per study (median, range) | `<…>` |
-| Slices per series (median, range) | `<…>` |
-| Transfer syntaxes (counts) | `<…>` |
-| Unreadable/corrupt files | `<…>` |
-| Disk size of subset used | `<…>` |
+| Dataset / version / download date | RSNA Knee Abnormality Detection (Kaggle); read in place in a Kaggle notebook, 2026-10-15; not downloaded |
+| Studies (total / labelled) | 4,407 / 58 |
+| Series per study (median, range) | 5.0, 4–11 (audit of 100 studies on disk) |
+| Slices per series (median, range) | 30, 11–320 (same sample) |
+| Transfer syntaxes (counts) | Explicit VR Little Endian: 565 (sampled files) |
+| Unreadable/corrupt files | 0 unreadable, 0 undecodable (sampled files) |
+| Disk size of subset used | not measured (read in place); tensor cache 865 MB |
 
 ## 3. Labels (KS-DATA-03, KS-LABEL-01)
 
 | Finding | Positive | Negative | Unknown/missing | Not labelled | Source |
 |---|---|---|---|---|---|
-| `<…>` | | | | | |
+| ACL | 24 | 34 | 0 | 4349 | train.csv (audit_dataset.py, 2026-10-15) |
+| MCL | 9 | 49 | 0 | 4349 | train.csv (audit_dataset.py, 2026-10-15) |
+| Medial Meniscus | 26 | 32 | 0 | 4349 | train.csv (audit_dataset.py, 2026-10-15) |
+| Lateral Meniscus | 23 | 35 | 0 | 4349 | train.csv (audit_dataset.py, 2026-10-15) |
+| Medial OA | 15 | 43 | 0 | 4349 | train.csv (audit_dataset.py, 2026-10-15) |
+| Lateral OA | 11 | 47 | 0 | 4349 | train.csv (audit_dataset.py, 2026-10-15) |
+| PF OA | 21 | 37 | 0 | 4349 | train.csv (audit_dataset.py, 2026-10-15) |
+| Effusion | 35 | 23 | 0 | 4349 | train.csv (audit_dataset.py, 2026-10-15) |
+| Synovitis | 27 | 31 | 0 | 4349 | train.csv (audit_dataset.py, 2026-10-15) |
+| Baker's | 12 | 46 | 0 | 4349 | train.csv (audit_dataset.py, 2026-10-15) |
+| Contusion | 19 | 39 | 0 | 4349 | train.csv (audit_dataset.py, 2026-10-15) |
+| Fracture | 18 | 40 | 0 | 4349 | train.csv (audit_dataset.py, 2026-10-15) |
 
 ## 4. Planes and series
 
@@ -99,9 +110,9 @@ model input; all series stay viewable):
 
 | Plane | Studies with ≥1 series | Studies missing | Series selection rule |
 |---|---|---|---|
-| Sagittal | | | `<…>` |
-| Coronal | | | |
-| Axial | | | |
+| Sagittal | 100 of 100 inspected | 0 | `RsnaAdapter.select_series` (rule above) |
+| Coronal | 100 of 100 inspected | 0 | same |
+| Axial | 100 of 100 inspected | 0 | same |
 
 ## 5. Grouping and splits (KS-DATA-08)
 
@@ -114,15 +125,17 @@ Groups are patients (PatientID) when present, otherwise studies. Writes
 `artifacts/splits/*.csv` with salted group hashes (no patient IDs) and prints the counts
 table for this section. `--fractions 0.8,0.2,0` gives a validation-only design.
 
-- Patient identifier available: `<field name or "not available">`
-- Site identifier available: `<…>`
-- Split method, seed, split hash: `<…>`
+- Patient identifier available: `PatientID` (DICOM header); 100 distinct in the 100 inspected studies; the 58 labelled studies form 58 groups, so no two share a patient
+- Site identifier available: no site field; `Manufacturer` (10 distinct) and `ManufacturerModelName` (26) are present in the inspected studies
+- Split method, seed, split hash: grouped by PatientID, profile `rsna4`, seed 2026, default fractions 0.7/0.15/0.15; hash `2aaff952a4e7e2f7a39eef0bc67be0ae46579276827b4509e05e1d7b147f01b2` (a teammate still needs to verify with `--expect-hash`)
 
 | Partition | Studies | Per-finding n+ / n− / unknown |
 |---|---|---|
-| Train | | |
-| Validation | | |
-| Test (if any) | | |
+| Train | 37 | ACL 17/20/0; MCL 6/31/0; Medial Meniscus 18/19/0; Lateral Meniscus 16/21/0 |
+| Validation | 10 | ACL 3/7/0; MCL 1/9/0; Medial Meniscus 4/6/0; Lateral Meniscus 4/6/0 |
+| Test (if any) | 11 | ACL 4/7/0; MCL 2/9/0; Medial Meniscus 4/7/0; Lateral Meniscus 3/8/0 |
+
+Held-out partitions have 1 to 4 positives per finding. MCL has 1 (validation) and 2 (test), so MCL must be reported as limited / not measured.
 
 ## 6. Demo studies (KS-DATA-10)
 
