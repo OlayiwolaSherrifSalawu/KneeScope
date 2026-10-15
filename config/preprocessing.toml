@@ -2,8 +2,8 @@
 # kneescope_ml.preprocess.preprocess_study() with this file. Changing any value changes
 # model inputs: bump `version`, invalidate caches and cached predictions, and record the
 # change in docs/decisions.md.
-version = "prep-0.0.0-placeholder"
-status = "placeholder" # becomes "frozen" once the data issue (KS-DATA-07) is accepted
+version = "prep-1.0.0"
+status = "frozen" # becomes "frozen" once the data issue (KS-DATA-07) is accepted
 
 [input]
 planes = ["sagittal", "coronal", "axial"]
