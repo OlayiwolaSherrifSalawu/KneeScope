@@ -189,7 +189,7 @@ Data issues KS-DATA-01…10 have code on `main` but stay open until real-data ru
 
 | Issue | Owner | Branch | Since |
 |---|---|---|---|
-| — | — | — | — |
+| [KS-EVAL-07](issues/KS-EVAL-07.md) | Codebuff (agent, on behalf of the evaluation workstream) | `ks/KS-EVAL-07-precompute-cached-predictions` | 2026-10-15 |
 
 ## Scaffold verification
 
