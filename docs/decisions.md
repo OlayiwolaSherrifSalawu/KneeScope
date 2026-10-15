@@ -141,6 +141,65 @@ entries may supersede earlier ones explicitly. Decisions still open are listed a
   closing, and a member must confirm the MIRA PDF excerpts and run the file listing.
 - **By:** Codebuff (agent) on behalf of the data workstream, 2026-10-15.
 
+## D-015 — 2026-10-15 — Organizer requirements recorded: mostly unknown; build due Fri 16 Oct 2026 (KS-SCOPE-01)
+
+- **Decision:** No organizer brief exists in this repository as of 2026-10-15, so every
+  requirement is recorded explicitly as `unknown` with a source, following KS-SCOPE-01's
+  guidance ("record 'unknown' explicitly and list the follow-up owner; do not assume a
+  live deployment is required"):
+
+  | Requirement | Recorded value | Source |
+  |---|---|---|
+  | Required deliverables (repo / live link / video / slides) | **unknown** — listed only as candidates in an open question | PRD §17.8 Q1 "Questions to answer today" (read 2026-10-15) |
+  | Deadline | Build due **Friday 16 October 2026**; hour and timezone **unknown** | PRD cover, "Scope update (12 Oct 2026)": "this is a 5-day hackathon build due Friday 16 Oct, not a Kaggle entry" |
+  | Judging criteria | **unknown** (model quality vs product/demo vs idea) | PRD §17.8 Q2 |
+  | Public live link required? | **unknown** → treated as not required | KS-SCOPE-01 guidance |
+  | Recorded video required? | **unknown** → treated as not required | KS-SCOPE-01 guidance |
+  | Slides | Out of scope for this backlog (separate task outside it) | KS-SCOPE-01 exclusions |
+  | Data, recording, third-party rules | RSNA: public hosting of rendered slices **no**; local demo to judges and recordings **unclear → not permitted** until the data-audit questions are answered | `docs/data-audit.md` §1; D-014 |
+
+- **Why:** PRD §17.8 poses these as questions the team must answer, and nothing in the
+  repository answers them; AGENTS.md §14 forbids agents contacting organizers, accepting
+  terms or submitting on anyone's behalf. Inventing a deadline hour or a judging rubric
+  would set a false target for KS-DEL-01.
+- **Consequences:** KS-OPS-05 (hosted demo) and KS-DEMO-03 (recording) are marked **not
+  triggered** in `docs/issue-index.md`, and `docs/issues/state.json` records
+  `"KS-OPS-05": false`. KS-OPS-05 still needs permitted-use clearance (D-014) even if a
+  brief later requires a link. KS-DEL-01's checklist carries the items above.
+  **Follow-up owner:** the coordinator (@anasabubakar or @JesuYiwola) obtains the
+  organizer brief, quotes it verbatim here with date and source, and updates KS-DEL-01
+  before submission.
+- **By:** Codebuff (agent) on behalf of the coordination workstream, 2026-10-15,
+  recording the facts above; the coordinator in session chose the record-`unknown` path
+  on 2026-10-15.
+
+## D-016 — 2026-10-15 — Named owners confirmed and cross-workstream reviewers named (KS-SCOPE-02)
+
+- **Decision:** Every workstream row in AGENTS.md §3 now names an owner and a reviewer
+  from a different workstream. **All six team members confirmed their rows on
+  2026-10-15:** @anasabubakar (coordination; modelling: training), @DaviStyle
+  (modelling: models), @Ijhay-stars (backend), @JesuYiwola (data; inference +
+  explainability), @mfon9 (evaluation; inference + explainability), @okeowovictor
+  (frontend). Shared contracts stay owned by all six; `qa` stays **unassigned** — it
+  rotates and nobody inherits it by default, least of all the coordinator. The team is
+  six people, so PRD §17.8 Q4's merge question is answered "no further merging needed";
+  roles are already merged where three people each hold two rows.
+  Reviewers recorded in the table: coordination → @mfon9; data → @DaviStyle;
+  modelling: models → @mfon9; modelling: training → @JesuYiwola; evaluation →
+  @Ijhay-stars; inference + explainability → @okeowovictor; backend → @okeowovictor;
+  frontend → @Ijhay-stars; shared → unassigned (per-change §8 approvals by each affected
+  consumer's owner); qa → unassigned (rotate from a different row).
+- **Why:** the project plan's ownership by deliverable was explicitly a recommendation,
+  not an accepted assignment (KS-SCOPE-02's problem statement), and CODEOWNERS says who
+  reviews paths, not who confirms a row or reviews work cross-workstream. Recording the
+  confirmations and a reviewer per row closes both gaps without assigning anyone to work
+  they did not agree to (KS-SCOPE-02 exclusion).
+- **Consequences:** PR review still requires someone from a different row (AGENTS.md §3);
+  ownership changes go through CODEOWNERS and the AGENTS.md table together; the
+  coordinator's role stays "merging and verifying", never finishing other rows' work.
+- **By:** Codebuff (agent) on behalf of the coordination workstream, 2026-10-15,
+  recording the team's confirmation of the same date.
+
 ## Open decisions
 
 | Decision | Evidence required | Issue |
@@ -150,6 +209,5 @@ entries may supersede earlier ones explicitly. Decisions still open are listed a
 | Evaluation partition | Patient grouping availability; label counts per partition | KS-DATA-08 |
 | Report-label extraction | Labelled subset size vs need | KS-DATA-04 → KS-LABEL-02 |
 | Serving mode | Measured latency vs request limit | KS-OPS-03 |
-| Named owners | Team agreement | KS-SCOPE-02 |
 | Submission expectations | Organizer requirements | KS-SCOPE-01 |
 | Hosting | Organizer requirement and data terms | KS-OPS-05 |
