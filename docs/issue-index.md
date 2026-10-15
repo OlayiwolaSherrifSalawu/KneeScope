@@ -167,6 +167,24 @@ accounts, authentication, billing · EHR/PACS integration · diagnosis or treatm
 recommendations · segmentation or injury grading · clinical deployment · Node gateway,
 Redis, database · paid GPU hosting.
 
+## Closed (with evidence on the GitHub issue)
+
+| Issue | GitHub | Merged via |
+|---|---|---|
+| KS-OPS-01 restricted-asset guard | #53 | #72 → #84 |
+| KS-EVAL-01 metrics module | #33 | #73 → #84 |
+| KS-MODEL-02 training pipeline | #29 | #79 → #84 |
+| KS-WEB-01 study browser | #45 | #74 → #84 |
+| KS-WEB-02 slice viewer | #46 | #76 → #84 |
+| KS-WEB-03 finding states + provenance | #47 | #77 → #84 |
+| KS-WEB-04 dataset label reveal | #48 | #78 → #84 |
+| KS-WEB-05 explanation panel | #49 | #84 |
+| KS-WEB-06 evaluation ledger | #50 | #75 → #84 |
+| KS-API-01 dataset-backed catalogue | #40 | #84 |
+
+Owner wording reviews still requested on WEB-04/05 (Labels) and WEB-06 (Evaluation).
+Data issues KS-DATA-01…10 have code on `main` but stay open until real-data runs.
+
 ## In progress
 
 | Issue | Owner | Branch | Since |
