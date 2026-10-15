@@ -8,7 +8,7 @@ Done when every required child issue is closed with evidence and conditional chi
 | Issue | Title | Type | Priority | Status |
 |---|---|---|---|---|
 | `KS-MODEL-01` | Simple comparator baseline for every selected finding | task | P0 | blocked |
-| `KS-MODEL-02` | Training pipeline with config, seeding, checkpointing and experiment provenance | task | P0 | ready |
+| `KS-MODEL-02` | Training pipeline with config, seeding, checkpointing and experiment provenance | task | P0 | closed |
 | `KS-MODEL-03` | Train the baseline model on the selected dataset | task | P0 | blocked |
 | `KS-MODEL-04` | [Conditional] One improvement round (fine-tuning or adjacent-slice input) | conditional | P2 | conditional-pending |
 | `KS-MODEL-05` | Package the checkpoint for serving with hash verification and a Predictor implementation | task | P0 | blocked |

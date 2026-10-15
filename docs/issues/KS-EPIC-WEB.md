@@ -7,15 +7,15 @@ Done when every required child issue is closed with evidence and conditional chi
 
 | Issue | Title | Type | Priority | Status |
 |---|---|---|---|---|
-| `KS-WEB-01` | Study browser: filter, sort, responsive list and all states | task | P0 | ready |
-| `KS-WEB-02` | Slice viewer: canvas rendering, navigation, zoom/pan, display adjust and missing series | task | P0 | ready |
-| `KS-WEB-03` | Findings panel: run analysis, five finding states and result provenance | task | P0 | ready |
-| `KS-WEB-04` | Reveal dataset label per finding, separate from inference | task | P0 | ready |
-| `KS-WEB-05` | Explanation panel: influential-slice jump and aligned attention overlay | task | P1 | blocked |
-| `KS-WEB-06` | Evaluation and model-card ledger view | task | P0 | ready |
-| `KS-WEB-07` | Accessibility and responsive verification across all pages | task | P1 | blocked |
+| `KS-WEB-01` | Study browser: filter, sort, responsive list and all states | task | P0 | closed |
+| `KS-WEB-02` | Slice viewer: canvas rendering, navigation, zoom/pan, display adjust and missing series | task | P0 | closed |
+| `KS-WEB-03` | Findings panel: run analysis, five finding states and result provenance | task | P0 | closed |
+| `KS-WEB-04` | Reveal dataset label per finding, separate from inference | task | P0 | closed |
+| `KS-WEB-05` | Explanation panel: influential-slice jump and aligned attention overlay | task | P1 | closed |
+| `KS-WEB-06` | Evaluation and model-card ledger view | task | P0 | closed |
+| `KS-WEB-07` | Accessibility and responsive verification across all pages | task | P1 | ready |
 | `KS-WEB-08` | [Conditional] Client support for job-and-poll predictions | conditional | P2 | conditional-pending |
-| `KS-OPT-02` | [Optional] Reviewer notes per study | optional | P2 | optional-blocked |
+| `KS-OPT-02` | [Optional] Reviewer notes per study | optional | P2 | optional-ready |
 | `KS-OPT-03` | [Optional] Exploratory threshold slider per finding | optional | P2 | optional-blocked |
-| `KS-OPT-04` | [Optional] Exportable research summary | optional | P2 | optional-blocked |
-| `KS-OPT-07` | [Optional] Slice thumbnail strip in the viewer | optional | P2 | optional-blocked |
+| `KS-OPT-04` | [Optional] Exportable research summary | optional | P2 | optional-ready |
+| `KS-OPT-07` | [Optional] Slice thumbnail strip in the viewer | optional | P2 | optional-ready |

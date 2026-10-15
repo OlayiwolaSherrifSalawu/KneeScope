@@ -7,7 +7,7 @@ Done when every required child issue is closed with evidence and conditional chi
 
 | Issue | Title | Type | Priority | Status |
 |---|---|---|---|---|
-| `KS-OPS-01` | Restricted-asset protection: data, checkpoints, logs and repository guards | task | P0 | ready |
+| `KS-OPS-01` | Restricted-asset protection: data, checkpoints, logs and repository guards | task | P0 | closed |
 | `KS-OPS-02` | Reproducible local container setup for API and web | task | P1 | blocked |
 | `KS-OPS-03` | Measure inference latency, peak memory and slice-serving latency | task | P1 | blocked |
 | `KS-OPS-04` | [Conditional] Minimal job-and-poll inference flow | conditional | P2 | conditional-pending |

@@ -8,7 +8,7 @@
 | Epic | `KS-EPIC-MODEL` |
 | Workstream | modelling |
 | Recommended owner role | Modelling |
-| Status (from state.json) | ready |
+| Status (from state.json) | closed |
 
 ## Problem
 

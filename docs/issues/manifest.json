@@ -383,7 +383,7 @@
       "blocks": [
         "KS-MODEL-03"
       ],
-      "status": "ready",
+      "status": "closed",
       "file": "docs/issues/KS-MODEL-02.md"
     },
     {
@@ -457,7 +457,7 @@
         "KS-MODEL-01",
         "KS-EVAL-02"
       ],
-      "status": "ready",
+      "status": "closed",
       "file": "docs/issues/KS-EVAL-01.md"
     },
     {
@@ -592,7 +592,7 @@
         "KS-API-05",
         "KS-OPT-05"
       ],
-      "status": "blocked",
+      "status": "closed",
       "file": "docs/issues/KS-API-01.md"
     },
     {
@@ -688,7 +688,7 @@
       "blocks": [
         "KS-WEB-07"
       ],
-      "status": "ready",
+      "status": "closed",
       "file": "docs/issues/KS-WEB-01.md"
     },
     {
@@ -705,7 +705,7 @@
         "KS-WEB-07",
         "KS-OPT-07"
       ],
-      "status": "ready",
+      "status": "closed",
       "file": "docs/issues/KS-WEB-02.md"
     },
     {
@@ -724,7 +724,7 @@
         "KS-OPT-02",
         "KS-OPT-04"
       ],
-      "status": "ready",
+      "status": "closed",
       "file": "docs/issues/KS-WEB-03.md"
     },
     {
@@ -739,7 +739,7 @@
       "blocks": [
         "KS-WEB-07"
       ],
-      "status": "ready",
+      "status": "closed",
       "file": "docs/issues/KS-WEB-04.md"
     },
     {
@@ -757,7 +757,7 @@
       "blocks": [
         "KS-WEB-07"
       ],
-      "status": "blocked",
+      "status": "closed",
       "file": "docs/issues/KS-WEB-05.md"
     },
     {
@@ -775,7 +775,7 @@
         "KS-OPT-03",
         "KS-OPT-04"
       ],
-      "status": "ready",
+      "status": "closed",
       "file": "docs/issues/KS-WEB-06.md"
     },
     {
@@ -798,7 +798,7 @@
         "KS-DEMO-02",
         "KS-QA-02"
       ],
-      "status": "blocked",
+      "status": "ready",
       "file": "docs/issues/KS-WEB-07.md"
     },
     {
@@ -830,7 +830,7 @@
         "KS-QA-02",
         "KS-OPT-01"
       ],
-      "status": "ready",
+      "status": "closed",
       "file": "docs/issues/KS-OPS-01.md"
     },
     {
@@ -1067,7 +1067,7 @@
         "KS-WEB-03"
       ],
       "blocks": [],
-      "status": "optional-blocked",
+      "status": "optional-ready",
       "file": "docs/issues/KS-OPT-02.md"
     },
     {
@@ -1099,7 +1099,7 @@
         "KS-WEB-06"
       ],
       "blocks": [],
-      "status": "optional-blocked",
+      "status": "optional-ready",
       "file": "docs/issues/KS-OPT-04.md"
     },
     {
@@ -1114,7 +1114,7 @@
         "KS-API-01"
       ],
       "blocks": [],
-      "status": "optional-blocked",
+      "status": "optional-ready",
       "file": "docs/issues/KS-OPT-05.md"
     },
     {
@@ -1144,7 +1144,7 @@
         "KS-WEB-02"
       ],
       "blocks": [],
-      "status": "optional-blocked",
+      "status": "optional-ready",
       "file": "docs/issues/KS-OPT-07.md"
     }
   ],

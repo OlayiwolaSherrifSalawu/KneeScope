@@ -8,7 +8,7 @@
 | Epic | `KS-EPIC-API` |
 | Workstream | backend |
 | Recommended owner role | Backend/serving |
-| Status (from state.json) | blocked |
+| Status (from state.json) | closed |
 
 ## Problem
 

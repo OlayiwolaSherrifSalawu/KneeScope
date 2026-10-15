@@ -23,31 +23,31 @@
 | [KS-LABEL-03](KS-LABEL-03.md) | Influential-slice explanations aligned to series slice coordinates | task | P1 | labels | [KS-MODEL-03](KS-MODEL-03.md) | blocked |
 | [KS-LABEL-04](KS-LABEL-04.md) | [Optional] Grad-CAM attention maps with alignment verification | optional | P2 | labels | [KS-LABEL-03](KS-LABEL-03.md) | optional-blocked |
 | [KS-MODEL-01](KS-MODEL-01.md) | Simple comparator baseline for every selected finding | task | P0 | modelling | [KS-DATA-09](KS-DATA-09.md), [KS-LABEL-01](KS-LABEL-01.md), [KS-EVAL-01](KS-EVAL-01.md) | blocked |
-| [KS-MODEL-02](KS-MODEL-02.md) | Training pipeline with config, seeding, checkpointing and experiment provenance | task | P0 | modelling | — | ready |
+| [KS-MODEL-02](KS-MODEL-02.md) | Training pipeline with config, seeding, checkpointing and experiment provenance | task | P0 | modelling | — | closed |
 | [KS-MODEL-03](KS-MODEL-03.md) | Train the baseline model on the selected dataset | task | P0 | modelling | [KS-MODEL-02](KS-MODEL-02.md), [KS-DATA-09](KS-DATA-09.md), [KS-LABEL-01](KS-LABEL-01.md), [KS-DATA-08](KS-DATA-08.md) | blocked |
 | [KS-MODEL-04](KS-MODEL-04.md) | [Conditional] One improvement round (fine-tuning or adjacent-slice input) | conditional | P2 | modelling | [KS-MODEL-03](KS-MODEL-03.md), [KS-EVAL-03](KS-EVAL-03.md) | conditional-pending |
 | [KS-MODEL-05](KS-MODEL-05.md) | Package the checkpoint for serving with hash verification and a Predictor implementation | task | P0 | modelling | [KS-MODEL-03](KS-MODEL-03.md) | blocked |
-| [KS-EVAL-01](KS-EVAL-01.md) | Metrics module: per-finding AUCs with undefined handling, counts, threshold metrics and macro AUC | task | P0 | evaluation | — | ready |
+| [KS-EVAL-01](KS-EVAL-01.md) | Metrics module: per-finding AUCs with undefined handling, counts, threshold metrics and macro AUC | task | P0 | evaluation | — | closed |
 | [KS-EVAL-02](KS-EVAL-02.md) | Select per-finding operating thresholds on the validation partition | task | P1 | evaluation | [KS-EVAL-01](KS-EVAL-01.md), [KS-MODEL-03](KS-MODEL-03.md) | blocked |
 | [KS-EVAL-03](KS-EVAL-03.md) | Held-out evaluation run and published metrics snapshot | task | P0 | evaluation | [KS-MODEL-03](KS-MODEL-03.md), [KS-MODEL-01](KS-MODEL-01.md), [KS-EVAL-02](KS-EVAL-02.md), [KS-DATA-08](KS-DATA-08.md) | blocked |
 | [KS-EVAL-04](KS-EVAL-04.md) | Error analysis: false positives, false negatives and failure cases | task | P1 | evaluation | [KS-EVAL-03](KS-EVAL-03.md) | blocked |
 | [KS-EVAL-05](KS-EVAL-05.md) | [Conditional] Calibration assessment and temperature scaling | conditional | P2 | evaluation | [KS-EVAL-03](KS-EVAL-03.md) | conditional-pending |
 | [KS-EVAL-06](KS-EVAL-06.md) | Complete the model card from evaluated evidence | task | P0 | evaluation | [KS-EVAL-03](KS-EVAL-03.md), [KS-EVAL-04](KS-EVAL-04.md), [KS-LABEL-01](KS-LABEL-01.md) | blocked |
 | [KS-EVAL-07](KS-EVAL-07.md) | Precompute cached predictions for the demo studies with full provenance | task | P1 | evaluation | [KS-API-04](KS-API-04.md), [KS-DATA-10](KS-DATA-10.md) | blocked |
-| [KS-API-01](KS-API-01.md) | Dataset-backed study catalogue and slice rendering in model mode | task | P0 | backend | [KS-DATA-05](KS-DATA-05.md), [KS-DATA-06](KS-DATA-06.md) | blocked |
+| [KS-API-01](KS-API-01.md) | Dataset-backed study catalogue and slice rendering in model mode | task | P0 | backend | [KS-DATA-05](KS-DATA-05.md), [KS-DATA-06](KS-DATA-06.md) | closed |
 | [KS-API-02](KS-API-02.md) | Live inference through shared preprocessing in POST /predictions | task | P0 | backend | [KS-API-01](KS-API-01.md), [KS-MODEL-05](KS-MODEL-05.md), [KS-DATA-07](KS-DATA-07.md) | blocked |
 | [KS-API-03](KS-API-03.md) | Serve real explanations with alignment validation | task | P1 | backend | [KS-API-02](KS-API-02.md), [KS-LABEL-03](KS-LABEL-03.md) | blocked |
 | [KS-API-04](KS-API-04.md) | Prediction cache with provenance-preserving cached results | task | P1 | backend | [KS-API-02](KS-API-02.md) | blocked |
 | [KS-API-05](KS-API-05.md) | Serve real labels, metrics snapshot and model card | task | P1 | backend | [KS-API-01](KS-API-01.md), [KS-LABEL-01](KS-LABEL-01.md), [KS-EVAL-03](KS-EVAL-03.md), [KS-EVAL-06](KS-EVAL-06.md) | blocked |
-| [KS-WEB-01](KS-WEB-01.md) | Study browser: filter, sort, responsive list and all states | task | P0 | frontend | — | ready |
-| [KS-WEB-02](KS-WEB-02.md) | Slice viewer: canvas rendering, navigation, zoom/pan, display adjust and missing series | task | P0 | frontend | — | ready |
-| [KS-WEB-03](KS-WEB-03.md) | Findings panel: run analysis, five finding states and result provenance | task | P0 | frontend | — | ready |
-| [KS-WEB-04](KS-WEB-04.md) | Reveal dataset label per finding, separate from inference | task | P0 | frontend | — | ready |
-| [KS-WEB-05](KS-WEB-05.md) | Explanation panel: influential-slice jump and aligned attention overlay | task | P1 | frontend | [KS-WEB-02](KS-WEB-02.md), [KS-WEB-03](KS-WEB-03.md) | blocked |
-| [KS-WEB-06](KS-WEB-06.md) | Evaluation and model-card ledger view | task | P0 | frontend | — | ready |
-| [KS-WEB-07](KS-WEB-07.md) | Accessibility and responsive verification across all pages | task | P1 | frontend | [KS-WEB-01](KS-WEB-01.md), [KS-WEB-02](KS-WEB-02.md), [KS-WEB-03](KS-WEB-03.md), [KS-WEB-04](KS-WEB-04.md), [KS-WEB-05](KS-WEB-05.md), [KS-WEB-06](KS-WEB-06.md) | blocked |
+| [KS-WEB-01](KS-WEB-01.md) | Study browser: filter, sort, responsive list and all states | task | P0 | frontend | — | closed |
+| [KS-WEB-02](KS-WEB-02.md) | Slice viewer: canvas rendering, navigation, zoom/pan, display adjust and missing series | task | P0 | frontend | — | closed |
+| [KS-WEB-03](KS-WEB-03.md) | Findings panel: run analysis, five finding states and result provenance | task | P0 | frontend | — | closed |
+| [KS-WEB-04](KS-WEB-04.md) | Reveal dataset label per finding, separate from inference | task | P0 | frontend | — | closed |
+| [KS-WEB-05](KS-WEB-05.md) | Explanation panel: influential-slice jump and aligned attention overlay | task | P1 | frontend | [KS-WEB-02](KS-WEB-02.md), [KS-WEB-03](KS-WEB-03.md) | closed |
+| [KS-WEB-06](KS-WEB-06.md) | Evaluation and model-card ledger view | task | P0 | frontend | — | closed |
+| [KS-WEB-07](KS-WEB-07.md) | Accessibility and responsive verification across all pages | task | P1 | frontend | [KS-WEB-01](KS-WEB-01.md), [KS-WEB-02](KS-WEB-02.md), [KS-WEB-03](KS-WEB-03.md), [KS-WEB-04](KS-WEB-04.md), [KS-WEB-05](KS-WEB-05.md), [KS-WEB-06](KS-WEB-06.md) | ready |
 | [KS-WEB-08](KS-WEB-08.md) | [Conditional] Client support for job-and-poll predictions | conditional | P2 | frontend | [KS-OPS-04](KS-OPS-04.md) | conditional-pending |
-| [KS-OPS-01](KS-OPS-01.md) | Restricted-asset protection: data, checkpoints, logs and repository guards | task | P0 | operations | — | ready |
+| [KS-OPS-01](KS-OPS-01.md) | Restricted-asset protection: data, checkpoints, logs and repository guards | task | P0 | operations | — | closed |
 | [KS-OPS-02](KS-OPS-02.md) | Reproducible local container setup for API and web | task | P1 | operations | [KS-API-02](KS-API-02.md) | blocked |
 | [KS-OPS-03](KS-OPS-03.md) | Measure inference latency, peak memory and slice-serving latency | task | P1 | operations | [KS-API-02](KS-API-02.md) | blocked |
 | [KS-OPS-04](KS-OPS-04.md) | [Conditional] Minimal job-and-poll inference flow | conditional | P2 | operations | [KS-OPS-03](KS-OPS-03.md) | conditional-pending |
@@ -60,12 +60,12 @@
 | [KS-DEL-01](KS-DEL-01.md) | Assemble and submit the final delivery package | task | P0 | delivery | [KS-SCOPE-01](KS-SCOPE-01.md), [KS-DOC-01](KS-DOC-01.md), [KS-DEMO-03](KS-DEMO-03.md), [KS-QA-02](KS-QA-02.md) | blocked |
 | [KS-QA-02](KS-QA-02.md) | Independent completion review against the evidence-based definition of done | task | P0 | qa | [KS-QA-01](KS-QA-01.md), [KS-EVAL-06](KS-EVAL-06.md), [KS-API-05](KS-API-05.md), [KS-API-03](KS-API-03.md), [KS-WEB-07](KS-WEB-07.md), [KS-OPS-01](KS-OPS-01.md), [KS-DEMO-02](KS-DEMO-02.md) | blocked |
 | [KS-OPT-01](KS-OPT-01.md) | [Optional] Upload support for user-supplied studies | optional | P2 | backend | [KS-API-02](KS-API-02.md), [KS-OPS-01](KS-OPS-01.md) | optional-blocked |
-| [KS-OPT-02](KS-OPT-02.md) | [Optional] Reviewer notes per study | optional | P2 | frontend | [KS-WEB-03](KS-WEB-03.md) | optional-blocked |
+| [KS-OPT-02](KS-OPT-02.md) | [Optional] Reviewer notes per study | optional | P2 | frontend | [KS-WEB-03](KS-WEB-03.md) | optional-ready |
 | [KS-OPT-03](KS-OPT-03.md) | [Optional] Exploratory threshold slider per finding | optional | P2 | frontend | [KS-EVAL-02](KS-EVAL-02.md), [KS-WEB-06](KS-WEB-06.md) | optional-blocked |
-| [KS-OPT-04](KS-OPT-04.md) | [Optional] Exportable research summary | optional | P2 | frontend | [KS-WEB-03](KS-WEB-03.md), [KS-WEB-06](KS-WEB-06.md) | optional-blocked |
-| [KS-OPT-05](KS-OPT-05.md) | [Optional] Server-side true window/level rendering | optional | P2 | backend | [KS-API-01](KS-API-01.md) | optional-blocked |
+| [KS-OPT-04](KS-OPT-04.md) | [Optional] Exportable research summary | optional | P2 | frontend | [KS-WEB-03](KS-WEB-03.md), [KS-WEB-06](KS-WEB-06.md) | optional-ready |
+| [KS-OPT-05](KS-OPT-05.md) | [Optional] Server-side true window/level rendering | optional | P2 | backend | [KS-API-01](KS-API-01.md) | optional-ready |
 | [KS-OPT-06](KS-OPT-06.md) | [Optional] Additional supported findings | optional | P2 | modelling | [KS-EVAL-03](KS-EVAL-03.md) | optional-blocked |
-| [KS-OPT-07](KS-OPT-07.md) | [Optional] Slice thumbnail strip in the viewer | optional | P2 | frontend | [KS-WEB-02](KS-WEB-02.md) | optional-blocked |
+| [KS-OPT-07](KS-OPT-07.md) | [Optional] Slice thumbnail strip in the viewer | optional | P2 | frontend | [KS-WEB-02](KS-WEB-02.md) | optional-ready |
 
 ## Critical path (required issues)
 

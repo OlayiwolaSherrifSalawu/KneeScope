@@ -8,7 +8,7 @@
 | Epic | `KS-EPIC-EVAL` |
 | Workstream | evaluation |
 | Recommended owner role | Evaluation |
-| Status (from state.json) | ready |
+| Status (from state.json) | closed |
 
 ## Problem
 

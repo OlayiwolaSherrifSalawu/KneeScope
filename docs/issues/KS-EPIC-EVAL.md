@@ -7,7 +7,7 @@ Done when every required child issue is closed with evidence and conditional chi
 
 | Issue | Title | Type | Priority | Status |
 |---|---|---|---|---|
-| `KS-EVAL-01` | Metrics module: per-finding AUCs with undefined handling, counts, threshold metrics and macro AUC | task | P0 | ready |
+| `KS-EVAL-01` | Metrics module: per-finding AUCs with undefined handling, counts, threshold metrics and macro AUC | task | P0 | closed |
 | `KS-EVAL-02` | Select per-finding operating thresholds on the validation partition | task | P1 | blocked |
 | `KS-EVAL-03` | Held-out evaluation run and published metrics snapshot | task | P0 | blocked |
 | `KS-EVAL-04` | Error analysis: false positives, false negatives and failure cases | task | P1 | blocked |

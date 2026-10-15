@@ -8,7 +8,7 @@
 | Epic | `KS-EPIC-QUALITY` |
 | Workstream | operations |
 | Recommended owner role | Backend/serving with QA reviewer |
-| Status (from state.json) | ready |
+| Status (from state.json) | closed |
 
 ## Problem
 

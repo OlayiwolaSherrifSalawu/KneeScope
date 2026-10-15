@@ -7,10 +7,10 @@ Done when every required child issue is closed with evidence and conditional chi
 
 | Issue | Title | Type | Priority | Status |
 |---|---|---|---|---|
-| `KS-API-01` | Dataset-backed study catalogue and slice rendering in model mode | task | P0 | blocked |
+| `KS-API-01` | Dataset-backed study catalogue and slice rendering in model mode | task | P0 | closed |
 | `KS-API-02` | Live inference through shared preprocessing in POST /predictions | task | P0 | blocked |
 | `KS-API-03` | Serve real explanations with alignment validation | task | P1 | blocked |
 | `KS-API-04` | Prediction cache with provenance-preserving cached results | task | P1 | blocked |
 | `KS-API-05` | Serve real labels, metrics snapshot and model card | task | P1 | blocked |
 | `KS-OPT-01` | [Optional] Upload support for user-supplied studies | optional | P2 | optional-blocked |
-| `KS-OPT-05` | [Optional] Server-side true window/level rendering | optional | P2 | optional-blocked |
+| `KS-OPT-05` | [Optional] Server-side true window/level rendering | optional | P2 | optional-ready |
