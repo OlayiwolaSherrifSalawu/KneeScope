@@ -72,24 +72,27 @@ common commands (setup, api, web, dev, test, lint, contracts, verify, up).
 
 Roles are responsibilities, not headcount. A small team merges roles (e.g. Data +
 Labels, Modelling + Evaluation, Backend + Frontend). Owners below come from
-`.github/CODEOWNERS`; nobody inherits an unassigned row by default.
+`.github/CODEOWNERS`; reviewers (last column) sit in a different workstream and were
+recorded under `KS-SCOPE-02` (D-016). Nobody inherits an unassigned row by default.
 
-| Workstream | Role | Owns (paths) | Owner (from CODEOWNERS) |
-|---|---|---|---|
-| coordination | Coordinator/integrator | `AGENTS.md`, `docs/decisions.md`, `docs/issues/`, `docs/issue-index.md` | @anasabubakar, @JesuYiwola |
-| data | Data/preprocessing (+ labels files) | `ml/kneescope_ml/adapters/`, `preprocess.py`, `render.py`, `labels.py`, `config/preprocessing.toml`, `docs/data-audit.md` | @JesuYiwola |
-| modelling: models | Modelling | `ml/kneescope_ml/model.py` | @DaviStyle |
-| modelling: training | Modelling | `ml/kneescope_ml/train.py`, `scripts/train.py`, `config/train.toml`, `docs/experiments.md` | @anasabubakar |
-| evaluation | Evaluation | `ml/kneescope_ml/evaluation.py`, `docs/model-card.md` | @mfon9 |
-| inference + explainability | Labels/explainability, serving model side | `ml/kneescope_ml/inference.py`, `explain.py`, `config/model.toml` | @mfon9, @JesuYiwola |
-| backend | Backend/serving | `api/`, `docker/`, `docker-compose.yml` | @Ijhay-stars |
-| frontend | Design/frontend | `web/`, `DESIGN.md`, `docs/design/` | @okeowovictor |
-| shared | Contract owners | `contracts/` — changes follow §8 | all six |
-| qa | Independent reviewer/QA | `tests/e2e/`, `docs/completion-review.md`, CI | unassigned — rotate: reviewer must come from a different row |
+| Workstream | Role | Owns (paths) | Owner (from CODEOWNERS) | Reviewer (different workstream) |
+|---|---|---|---|---|
+| coordination | Coordinator/integrator | `AGENTS.md`, `docs/decisions.md`, `docs/issues/`, `docs/issue-index.md` | @anasabubakar, @JesuYiwola | @mfon9 (evaluation) |
+| data | Data/preprocessing (+ labels files) | `ml/kneescope_ml/adapters/`, `preprocess.py`, `render.py`, `labels.py`, `config/preprocessing.toml`, `docs/data-audit.md` | @JesuYiwola | @DaviStyle (modelling: models) |
+| modelling: models | Modelling | `ml/kneescope_ml/model.py` | @DaviStyle | @mfon9 (evaluation) |
+| modelling: training | Modelling | `ml/kneescope_ml/train.py`, `scripts/train.py`, `config/train.toml`, `docs/experiments.md` | @anasabubakar | @JesuYiwola (data) |
+| evaluation | Evaluation | `ml/kneescope_ml/evaluation.py`, `docs/model-card.md` | @mfon9 | @Ijhay-stars (backend) |
+| inference + explainability | Labels/explainability, serving model side | `ml/kneescope_ml/inference.py`, `explain.py`, `config/model.toml` | @mfon9, @JesuYiwola | @okeowovictor (frontend) |
+| backend | Backend/serving | `api/`, `docker/`, `docker-compose.yml` | @Ijhay-stars | @okeowovictor (frontend) |
+| frontend | Design/frontend | `web/`, `DESIGN.md`, `docs/design/` | @okeowovictor | @Ijhay-stars (backend) |
+| shared | Contract owners | `contracts/` — changes follow §8 | @anasabubakar, @DaviStyle, @Ijhay-stars, @JesuYiwola, @mfon9, @okeowovictor (all six) | unassigned — each affected consumer's owner approves per §8 |
+| qa | Independent reviewer/QA | `tests/e2e/`, `docs/completion-review.md`, CI | unassigned | unassigned — rotate; must come from a different row |
 
-`.github/CODEOWNERS` is the source of truth for this table; change both together. Owners
-were carried over from the original scaffold's CODEOWNERS (D-012); each person confirms
-their row under `KS-SCOPE-02`. Reviewer for a PR = someone from a different row.
+`.github/CODEOWNERS` is the source of truth for the owner column; change both together.
+Owners were carried over from the original scaffold's CODEOWNERS (D-012); each person
+confirmed their row on 2026-10-15 under `KS-SCOPE-02` (D-016). The reviewer column was
+added by that decision, and every reviewer sits in a different row. Reviewer for a PR =
+someone from a different row.
 
 "Integration ownership" means merging and verifying; it does **not** mean finishing other
 workstreams' unfinished work.

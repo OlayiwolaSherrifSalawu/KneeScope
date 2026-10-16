@@ -134,8 +134,10 @@ Critical blockers:
    whether report extraction (KS-LABEL-02) or the interaction-prototype path
    (KS-SCOPE-03) are triggered.
 3. **Compute for KS-MODEL-03** — no GPU subscription is assumed.
-4. **Organizer requirements (KS-SCOPE-01)** — decide whether deployment (KS-OPS-05) and
-   which recording/demo formats are required.
+4. **Organizer requirements (KS-SCOPE-01)** — recorded as unknown on 2026-10-15
+   ([D-015](decisions.md)): KS-OPS-05 and KS-DEMO-03 are **not triggered** unless the
+   brief requires them. Coordinator still to obtain the brief (deliverables, hour +
+   timezone, judging) before KS-DEL-01.
 
 ## Conditional issues and triggers
 
@@ -147,7 +149,8 @@ Critical blockers:
 | [KS-EVAL-05](issues/KS-EVAL-05.md) | Enough validation positives/negatives for calibration | KS-EVAL-03 | pending |
 | [KS-OPS-04](issues/KS-OPS-04.md) | p95 latency > request timeout | KS-OPS-03 | pending |
 | [KS-WEB-08](issues/KS-WEB-08.md) | KS-OPS-04 implemented | KS-OPS-04 | pending |
-| [KS-OPS-05](issues/KS-OPS-05.md) | Organizers require a live link and terms allow hosting | KS-SCOPE-01, KS-DATA-01/02 | pending |
+| [KS-OPS-05](issues/KS-OPS-05.md) | Organizers require a live link and terms allow hosting | KS-SCOPE-01, KS-DATA-01/02 | **not triggered** 2026-10-15 — [D-015](decisions.md) (requirement unknown, not assumed; flips to triggered only if a brief requires a link AND terms allow hosting) |
+| [KS-DEMO-03](issues/KS-DEMO-03.md) | Organizers require a recorded video (KS-SCOPE-01) | KS-SCOPE-01 | **not triggered** 2026-10-15 — [D-015](decisions.md) (requirement unknown, not assumed; the fallback recording task stays blocked by its dependencies) |
 
 ## Optional enhancements (never block delivery)
 
@@ -191,6 +194,8 @@ Data issues KS-DATA-01…10 have code on `main` but stay open until real-data ru
 |---|---|---|---|
 | [KS-EVAL-07](issues/KS-EVAL-07.md) | Codebuff (agent, on behalf of the evaluation workstream) | `ks/KS-EVAL-07-precompute-cached-predictions` | 2026-10-15 |
 | [KS-DATA-01](issues/KS-DATA-01.md) | Codebuff (agent, on behalf of the data workstream) | `olayiwolasherrifsalawu/work` | 2026-10-15 |
+| [KS-SCOPE-01](issues/KS-SCOPE-01.md) | Codebuff (agent, on behalf of the coordination workstream) | `olayiwolasherrifsalawu/work` | 2026-10-15 |
+| [KS-SCOPE-02](issues/KS-SCOPE-02.md) | Codebuff (agent, on behalf of the coordination workstream) | `olayiwolasherrifsalawu/work` | 2026-10-15 |
 
 ## Scaffold verification
 

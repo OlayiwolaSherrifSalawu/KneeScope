@@ -29,7 +29,15 @@ A checklist in this issue (filled from KS-SCOPE-01) with each deliverable linked
 
 ## Scope
 
-- Fill checklist.
+- Deliverable checklist, filled from KS-SCOPE-01 / [D-015](../decisions.md). Recording an item as unknown does not make it optional — re-verify every `unknown` against the organizer brief before submitting:
+- [ ] Repository at `main` with a reproducible README (KS-DOC-01), tagged for delivery
+- [ ] Model card and metrics snapshot consistent with the repository state (KS-EVAL-06, KS-EVAL-03)
+- [ ] Public live link — **not required as recorded** (unknown; KS-OPS-05 not triggered, [D-015](../decisions.md))
+- [ ] Recorded demo video — **not required as recorded** (unknown; KS-DEMO-03 not triggered as a delivery requirement; any recording stays fixture-mode until D-014 questions 2–3 are answered)
+- [ ] Slides — out of scope (KS-SCOPE-01 exclusion; separate task outside this backlog)
+- [ ] Deadline: Friday 16 October 2026, hour and timezone unknown (PRD scope update, 12 Oct 2026)
+- [ ] Judging criteria: unknown (PRD §17.8 Q2) — confirm with the organizers
+- [ ] Coordinator updates D-015 and this checklist when the organizer brief arrives
 - Tag release.
 - Verify links from a logged-out browser.
 - Human submits.
