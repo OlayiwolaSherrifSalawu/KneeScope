@@ -1,0 +1,8 @@
+{
+  "name": "KneeScope",
+  "description": "Knee MRI research review prototype for inspecting studies, running abnormality detection models, reviewing findings, influential slices, dataset labels, and model cards.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

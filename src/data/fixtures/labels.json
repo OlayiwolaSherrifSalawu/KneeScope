@@ -1,0 +1,190 @@
+{
+  "notice": "FIXTURE - invented labels for UI development. Not from any dataset.",
+  "studies": {
+    "real-study-001": {
+      "acl": {
+        "state": "negative",
+        "provenance": "reference_radiologist_report",
+        "source_ref": "images.jpeg"
+      },
+      "mcl": {
+        "state": "negative",
+        "provenance": "reference_radiologist_report",
+        "source_ref": "images.jpeg"
+      },
+      "medial_meniscus": {
+        "state": "negative",
+        "provenance": "reference_radiologist_report",
+        "source_ref": "images.jpeg"
+      },
+      "lateral_meniscus": {
+        "state": "negative",
+        "provenance": "reference_radiologist_report",
+        "source_ref": "images.jpeg"
+      },
+      "abnormal": {
+        "state": "negative",
+        "provenance": "reference_radiologist_report",
+        "source_ref": "images.jpeg"
+      },
+      "acl_tear": {
+        "state": "negative",
+        "provenance": "reference_radiologist_report",
+        "source_ref": "images.jpeg"
+      },
+      "meniscal_tear": {
+        "state": "negative",
+        "provenance": "reference_radiologist_report",
+        "source_ref": "images.jpeg"
+      }
+    },
+    "fx-study-001": {
+      "acl": {
+        "state": "positive",
+        "provenance": "fixture",
+        "source_ref": "contracts/fixtures/labels.json"
+      },
+      "mcl": {
+        "state": "negative",
+        "provenance": "fixture",
+        "source_ref": "contracts/fixtures/labels.json"
+      },
+      "medial_meniscus": {
+        "state": "unknown",
+        "provenance": "fixture",
+        "source_ref": "contracts/fixtures/labels.json"
+      },
+      "lateral_meniscus": {
+        "state": "not_labeled",
+        "provenance": "fixture",
+        "source_ref": "contracts/fixtures/labels.json"
+      },
+      "abnormal": {
+        "state": "positive",
+        "provenance": "fixture",
+        "source_ref": "contracts/fixtures/labels.json"
+      },
+      "acl_tear": {
+        "state": "positive",
+        "provenance": "fixture",
+        "source_ref": "contracts/fixtures/labels.json"
+      },
+      "meniscal_tear": {
+        "state": "unknown",
+        "provenance": "fixture",
+        "source_ref": "contracts/fixtures/labels.json"
+      }
+    },
+    "fx-study-002": {
+      "acl": {
+        "state": "negative",
+        "provenance": "fixture",
+        "source_ref": "contracts/fixtures/labels.json"
+      },
+      "mcl": {
+        "state": "negative",
+        "provenance": "fixture",
+        "source_ref": "contracts/fixtures/labels.json"
+      },
+      "medial_meniscus": {
+        "state": "positive",
+        "provenance": "fixture",
+        "source_ref": "contracts/fixtures/labels.json"
+      },
+      "lateral_meniscus": {
+        "state": "negative",
+        "provenance": "fixture",
+        "source_ref": "contracts/fixtures/labels.json"
+      },
+      "abnormal": {
+        "state": "positive",
+        "provenance": "fixture",
+        "source_ref": "contracts/fixtures/labels.json"
+      },
+      "acl_tear": {
+        "state": "negative",
+        "provenance": "fixture",
+        "source_ref": "contracts/fixtures/labels.json"
+      },
+      "meniscal_tear": {
+        "state": "positive",
+        "provenance": "fixture",
+        "source_ref": "contracts/fixtures/labels.json"
+      }
+    },
+    "fx-study-003": {
+      "acl": {
+        "state": "unknown",
+        "provenance": "fixture",
+        "source_ref": "contracts/fixtures/labels.json"
+      },
+      "mcl": {
+        "state": "unknown",
+        "provenance": "fixture",
+        "source_ref": "contracts/fixtures/labels.json"
+      },
+      "medial_meniscus": {
+        "state": "unknown",
+        "provenance": "fixture",
+        "source_ref": "contracts/fixtures/labels.json"
+      },
+      "lateral_meniscus": {
+        "state": "unknown",
+        "provenance": "fixture",
+        "source_ref": "contracts/fixtures/labels.json"
+      },
+      "abnormal": {
+        "state": "unknown",
+        "provenance": "fixture",
+        "source_ref": "contracts/fixtures/labels.json"
+      },
+      "acl_tear": {
+        "state": "unknown",
+        "provenance": "fixture",
+        "source_ref": "contracts/fixtures/labels.json"
+      },
+      "meniscal_tear": {
+        "state": "unknown",
+        "provenance": "fixture",
+        "source_ref": "contracts/fixtures/labels.json"
+      }
+    },
+    "fx-study-004": {
+      "acl": {
+        "state": "negative",
+        "provenance": "fixture",
+        "source_ref": "contracts/fixtures/labels.json"
+      },
+      "mcl": {
+        "state": "positive",
+        "provenance": "fixture",
+        "source_ref": "contracts/fixtures/labels.json"
+      },
+      "medial_meniscus": {
+        "state": "negative",
+        "provenance": "fixture",
+        "source_ref": "contracts/fixtures/labels.json"
+      },
+      "lateral_meniscus": {
+        "state": "unknown",
+        "provenance": "fixture",
+        "source_ref": "contracts/fixtures/labels.json"
+      },
+      "abnormal": {
+        "state": "positive",
+        "provenance": "fixture",
+        "source_ref": "contracts/fixtures/labels.json"
+      },
+      "acl_tear": {
+        "state": "negative",
+        "provenance": "fixture",
+        "source_ref": "contracts/fixtures/labels.json"
+      },
+      "meniscal_tear": {
+        "state": "negative",
+        "provenance": "fixture",
+        "source_ref": "contracts/fixtures/labels.json"
+      }
+    }
+  }
+}

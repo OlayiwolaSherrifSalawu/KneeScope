@@ -1,0 +1,69 @@
+{
+  "notice": "FIXTURE - influential slices are hand-picked placeholders, not model attention.",
+  "explanations": {
+    "real-study-001": {
+      "acl": {
+        "kind": "influential_slices",
+        "series_id": "real-ser-01",
+        "plane": "sagittal",
+        "slices": [
+          {
+            "slice_index": 12,
+            "weight": 1.0
+          },
+          {
+            "slice_index": 13,
+            "weight": 0.85
+          }
+        ]
+      },
+      "abnormal": {
+        "kind": "influential_slices",
+        "series_id": "real-ser-01",
+        "plane": "sagittal",
+        "slices": [
+          {
+            "slice_index": 12,
+            "weight": 1.0
+          }
+        ]
+      }
+    },
+    "fx-study-001": {
+      "acl": {
+        "kind": "influential_slices",
+        "series_id": "fx-ser-01",
+        "plane": "sagittal",
+        "slices": [
+          {
+            "slice_index": 12,
+            "weight": 1.0
+          },
+          {
+            "slice_index": 13,
+            "weight": 0.8
+          },
+          {
+            "slice_index": 15,
+            "weight": 0.55
+          }
+        ]
+      },
+      "abnormal": {
+        "kind": "influential_slices",
+        "series_id": "fx-ser-01",
+        "plane": "sagittal",
+        "slices": [
+          {
+            "slice_index": 11,
+            "weight": 1.0
+          },
+          {
+            "slice_index": 14,
+            "weight": 0.6
+          }
+        ]
+      }
+    }
+  }
+}

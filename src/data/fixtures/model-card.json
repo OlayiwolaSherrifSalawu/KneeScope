@@ -1,0 +1,61 @@
+{
+  "schema_version": "0.1.0",
+  "status": "draft",
+  "origin": "fixture",
+  "model": null,
+  "preprocessing": {
+    "version": "prep-0.0.0-placeholder",
+    "config_sha256": null
+  },
+  "sections": [
+    {
+      "section_id": "intended_use",
+      "title": "Intended use",
+      "body": "Research and teaching review of knee MRI studies the team is permitted to use: inspect a study, review model scores for supported findings, compare with dataset labels in a separate step, and examine measured limitations."
+    },
+    {
+      "section_id": "out_of_scope",
+      "title": "Out-of-scope use",
+      "body": "Diagnosis, triage, treatment decisions, clinical deployment, studies outside the permitted dataset, and any claim of clinical benefit or cross-site generalisation."
+    },
+    {
+      "section_id": "data",
+      "title": "Data",
+      "body": "Not selected. The dataset, its access terms, and permitted training, hosting and demonstration uses are pending (KS-DATA-01, KS-DATA-02)."
+    },
+    {
+      "section_id": "labels",
+      "title": "Labels and provenance",
+      "body": "Not established. Label source (expert annotation, dataset-provided, or report-extracted) will be recorded per finding."
+    },
+    {
+      "section_id": "training",
+      "title": "Training",
+      "body": "No model trained."
+    },
+    {
+      "section_id": "evaluation",
+      "title": "Evaluation",
+      "body": "Metrics unavailable. See GET /metrics."
+    },
+    {
+      "section_id": "calibration",
+      "title": "Calibration",
+      "body": "Not assessed. Scores are uncalibrated model scores, not probabilities."
+    },
+    {
+      "section_id": "explanations",
+      "title": "Explanations",
+      "body": "Influential slices or model attention, if implemented, show what influenced a score. They do not localise an injury."
+    }
+  ],
+  "limitations": [
+    "Scores are uncalibrated. A score of 0.85 is not an 85% chance of injury.",
+    "ROC AUC measures ranking, not accuracy.",
+    "Explanations do not localise injuries.",
+    "A model trained on one dataset is not validated on another; single-site evaluation does not establish cross-site generalisation.",
+    "Separate MRI planes are independent acquisitions and are not spatially synchronised in the viewer.",
+    "This draft card describes a fixture-mode scaffold. No model exists yet."
+  ],
+  "updated_at": null
+}

@@ -1,0 +1,62 @@
+{
+  "registry_version": "findings-0.1.0",
+  "notice": "Finding IDs are stable. A profile lists the findings a dataset can legitimately support. The active profile is chosen by KNEESCOPE_FINDING_PROFILE and must match the loaded model's supported findings.",
+  "findings": {
+    "acl": {
+      "display_name": "ACL",
+      "description": "Anterior cruciate ligament injury (RSNA label 'ACL').",
+      "dataset_columns": { "rsna_knee_2026": "ACL" }
+    },
+    "mcl": {
+      "display_name": "MCL",
+      "description": "Medial collateral ligament injury (RSNA label 'MCL').",
+      "dataset_columns": { "rsna_knee_2026": "MCL" }
+    },
+    "medial_meniscus": {
+      "display_name": "Medial meniscus",
+      "description": "Medial meniscus tear (RSNA label 'Medial Meniscus').",
+      "dataset_columns": { "rsna_knee_2026": "Medial Meniscus" }
+    },
+    "lateral_meniscus": {
+      "display_name": "Lateral meniscus",
+      "description": "Lateral meniscus tear (RSNA label 'Lateral Meniscus').",
+      "dataset_columns": { "rsna_knee_2026": "Lateral Meniscus" }
+    },
+    "abnormal": {
+      "display_name": "Abnormal (overall)",
+      "description": "Any abnormality (MRNet task 'abnormal').",
+      "dataset_columns": { "mrnet_v1": "abnormal" }
+    },
+    "acl_tear": {
+      "display_name": "ACL tear",
+      "description": "ACL tear (MRNet task 'acl'). Not interchangeable with the RSNA 'ACL' injury label.",
+      "dataset_columns": { "mrnet_v1": "acl" }
+    },
+    "meniscal_tear": {
+      "display_name": "Meniscal tear",
+      "description": "Any meniscal tear, medial and lateral combined (MRNet task 'meniscus').",
+      "dataset_columns": { "mrnet_v1": "meniscus" }
+    }
+  },
+  "profiles": {
+    "rsna4": {
+      "dataset_id": "rsna_knee_2026",
+      "findings": ["acl", "mcl", "medial_meniscus", "lateral_meniscus"],
+      "status": "candidate",
+      "note": "Requires verified access to the RSNA Knee Abnormality Detection data, accepted rules, and enough labelled studies. Only a small subset of RSNA training studies carry labels."
+    },
+    "mrnet3": {
+      "dataset_id": "mrnet_v1",
+      "findings": ["abnormal", "acl_tear", "meniscal_tear"],
+      "status": "candidate",
+      "note": "Requires an approved MRNet data-use agreement. MRNet has no MCL label and no separate medial/lateral meniscus labels."
+    },
+    "interaction_prototype": {
+      "dataset_id": null,
+      "findings": ["acl", "mcl", "medial_meniscus", "lateral_meniscus"],
+      "status": "fixture_only",
+      "note": "No usable training data. The product is an interaction prototype; every result is a fixture and no detection claim is made."
+    }
+  },
+  "default_profile": "interaction_prototype"
+}

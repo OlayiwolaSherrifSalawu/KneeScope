@@ -1,0 +1,220 @@
+{
+  "notice": "FIXTURE - synthetic development studies. Images are geometric phantoms, not MRI. Not dataset studies.",
+  "studies": [
+    {
+      "study_id": "real-study-001",
+      "display_label": "Real Knee MRI (images.jpeg • Sagittal View)",
+      "origin": "dataset",
+      "dataset_id": "clinical_knee_mri",
+      "planes_available": [
+        "sagittal"
+      ],
+      "series_count": 1,
+      "analysis_status": "not_run",
+      "series": [
+        {
+          "series_id": "real-ser-01",
+          "plane": "sagittal",
+          "description": "Sag T1/PD Real Knee MRI (images.jpeg)",
+          "num_slices": 24,
+          "slice_order": "patient_position",
+          "fluid_sensitive": true,
+          "fat_suppressed": false,
+          "rendered_width": 256,
+          "rendered_height": 256
+        }
+      ]
+    },
+    {
+      "study_id": "fx-study-001",
+      "display_label": "Fixture study 001",
+      "origin": "fixture",
+      "dataset_id": null,
+      "planes_available": [
+        "sagittal",
+        "coronal",
+        "axial"
+      ],
+      "series_count": 4,
+      "analysis_status": "not_run",
+      "series": [
+        {
+          "series_id": "fx-ser-01",
+          "plane": "sagittal",
+          "description": "Sag PD FS (fixture)",
+          "num_slices": 30,
+          "slice_order": "synthetic",
+          "fluid_sensitive": true,
+          "fat_suppressed": true,
+          "rendered_width": 256,
+          "rendered_height": 256
+        },
+        {
+          "series_id": "fx-ser-04",
+          "plane": "sagittal",
+          "description": "Sag T1 (fixture)",
+          "num_slices": 24,
+          "slice_order": "synthetic",
+          "fluid_sensitive": false,
+          "fat_suppressed": false,
+          "rendered_width": 256,
+          "rendered_height": 256
+        },
+        {
+          "series_id": "fx-ser-02",
+          "plane": "coronal",
+          "description": "Cor PD FS (fixture)",
+          "num_slices": 28,
+          "slice_order": "synthetic",
+          "fluid_sensitive": true,
+          "fat_suppressed": true,
+          "rendered_width": 256,
+          "rendered_height": 256
+        },
+        {
+          "series_id": "fx-ser-03",
+          "plane": "axial",
+          "description": "Ax PD FS (fixture)",
+          "num_slices": 32,
+          "slice_order": "synthetic",
+          "fluid_sensitive": true,
+          "fat_suppressed": true,
+          "rendered_width": 256,
+          "rendered_height": 256
+        }
+      ],
+      "missing_planes": [],
+      "warnings": []
+    },
+    {
+      "study_id": "fx-study-002",
+      "display_label": "Fixture study 002 (axial missing)",
+      "origin": "fixture",
+      "dataset_id": null,
+      "planes_available": [
+        "sagittal",
+        "coronal"
+      ],
+      "series_count": 2,
+      "analysis_status": "not_run",
+      "series": [
+        {
+          "series_id": "fx-ser-11",
+          "plane": "sagittal",
+          "description": "Sag PD FS (fixture)",
+          "num_slices": 26,
+          "slice_order": "synthetic",
+          "fluid_sensitive": true,
+          "fat_suppressed": true,
+          "rendered_width": 256,
+          "rendered_height": 256
+        },
+        {
+          "series_id": "fx-ser-12",
+          "plane": "coronal",
+          "description": "Cor T2 FS (fixture)",
+          "num_slices": 22,
+          "slice_order": "synthetic",
+          "fluid_sensitive": true,
+          "fat_suppressed": true,
+          "rendered_width": 256,
+          "rendered_height": 256
+        }
+      ],
+      "missing_planes": [
+        "axial"
+      ],
+      "warnings": []
+    },
+    {
+      "study_id": "fx-study-003",
+      "display_label": "Fixture study 003 (Meniscal Tear Case)",
+      "origin": "fixture",
+      "dataset_id": null,
+      "planes_available": [
+        "sagittal",
+        "coronal",
+        "axial"
+      ],
+      "series_count": 3,
+      "analysis_status": "not_run",
+      "series": [
+        {
+          "series_id": "fx-ser-21",
+          "plane": "sagittal",
+          "description": "Sag PD FS (fixture)",
+          "num_slices": 34,
+          "slice_order": "synthetic",
+          "fluid_sensitive": true,
+          "fat_suppressed": true,
+          "rendered_width": 256,
+          "rendered_height": 256
+        },
+        {
+          "series_id": "fx-ser-22",
+          "plane": "coronal",
+          "description": "Cor PD FS (fixture)",
+          "num_slices": 30,
+          "slice_order": "synthetic",
+          "fluid_sensitive": true,
+          "fat_suppressed": true,
+          "rendered_width": 256,
+          "rendered_height": 256
+        },
+        {
+          "series_id": "fx-ser-23",
+          "plane": "axial",
+          "description": "Ax T2 FS (fixture)",
+          "num_slices": 36,
+          "slice_order": "synthetic",
+          "fluid_sensitive": true,
+          "fat_suppressed": true,
+          "rendered_width": 256,
+          "rendered_height": 256
+        }
+      ],
+      "missing_planes": [],
+      "warnings": []
+    },
+    {
+      "study_id": "fx-study-004",
+      "display_label": "Fixture study 004 (sagittal missing)",
+      "origin": "fixture",
+      "dataset_id": null,
+      "planes_available": [
+        "coronal",
+        "axial"
+      ],
+      "series_count": 2,
+      "analysis_status": "not_run",
+      "series": [
+        {
+          "series_id": "fx-ser-32",
+          "plane": "coronal",
+          "description": "Cor PD FS (fixture)",
+          "num_slices": 24,
+          "slice_order": "synthetic",
+          "fluid_sensitive": true,
+          "fat_suppressed": true,
+          "rendered_width": 256,
+          "rendered_height": 256
+        },
+        {
+          "series_id": "fx-ser-33",
+          "plane": "axial",
+          "description": "Ax PD FS (fixture)",
+          "num_slices": 30,
+          "slice_order": "synthetic",
+          "fluid_sensitive": true,
+          "fat_suppressed": true,
+          "rendered_width": 256,
+          "rendered_height": 256
+        }
+      ],
+      "missing_planes": [
+        "sagittal"
+      ],
+      "warnings": []
+    }
+  ]
+}

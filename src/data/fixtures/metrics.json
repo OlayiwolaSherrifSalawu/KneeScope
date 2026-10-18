@@ -1,0 +1,8 @@
+{
+  "schema_version": "0.1.0",
+  "status": "unavailable",
+  "origin": "fixture",
+  "reason": "No checkpoint has been trained and evaluated. Metrics are never fabricated; this snapshot stays unavailable until KS-EVAL-03 publishes a real one.",
+  "per_finding": [],
+  "calibration": "not_assessed"
+}

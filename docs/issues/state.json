@@ -11,7 +11,5 @@
     "KS-WEB-05",
     "KS-WEB-06"
   ],
-  "triggered": {
-    "KS-OPS-05": false
-  }
+  "triggered": {}
 }
