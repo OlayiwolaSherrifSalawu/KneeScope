@@ -20,3 +20,23 @@ def load_fixture_labels(path: Path) -> dict[str, dict[str, dict[str, str | None]
             if label["state"] not in LABEL_STATES:
                 raise ValueError(f"invalid label state {label['state']!r}")
     return data["studies"]  # type: ignore[no-any-return]
+
+
+def state_from_dataset_value(value: object) -> str:
+    """Map a raw dataset cell to a label state.
+
+    Blank or uncertain values become 'unknown', never 'negative'.
+    'not_labeled' is decided per study in the build script, not here.
+    """
+    if value is None:
+        return "unknown"
+    if isinstance(value, float) and value != value:  # NaN
+        return "unknown"
+    text = str(value).strip().lower()
+    if text in ("", "nan", "none", "unknown", "uncertain"):
+        return "unknown"
+    if text in ("1", "1.0"):
+        return "positive"
+    if text in ("0", "0.0"):
+        return "negative"
+    raise ValueError(f"unrecognised dataset label value {value!r}")
