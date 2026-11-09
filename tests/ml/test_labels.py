@@ -80,3 +80,21 @@ def test_build_rows_rejects_duplicate_study():
 def test_build_rows_rejects_missing_column():
     with pytest.raises(ValueError):
         build_label_rows([{"study_id": "fake-1"}], {"acl": "ACL"})
+
+
+def test_written_file_loads_back_as_contract_records(tmp_path):
+    from kneescope_ml.labels import count_states, load_study_labels, write_label_rows
+
+    rows = build_label_rows(
+        [{"study_id": "fake-1", "ACL": 1, "MCL": ""}],
+        {"acl": "ACL", "mcl": "MCL"},
+        source_ref="fake.csv",
+        all_study_ids=["fake-1", "fake-2"],
+    )
+    path = tmp_path / "labels.csv"
+    write_label_rows(rows, path)
+    studies = {s.study_id: s for s in load_study_labels(path, dataset_id="fake")}
+    assert set(studies) == {"fake-1", "fake-2"}
+    states = {label.finding_id: label.state.value for label in studies["fake-1"].labels}
+    assert states == {"acl": "positive", "mcl": "unknown"}
+    assert count_states(rows)["acl"] == {"positive": 1, "not_labeled": 1}

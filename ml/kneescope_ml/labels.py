@@ -6,6 +6,7 @@ Labels are never an inference input. Do not import this module from
 
 from __future__ import annotations
 
+import csv
 import json
 from pathlib import Path
 
@@ -100,3 +101,48 @@ def build_label_rows(
                 }
             )
     return out
+
+
+LABEL_FILE_COLUMNS = ("study_id", "finding_id", "state", "provenance", "source_ref")
+
+
+def write_label_rows(rows: list[dict[str, str | None]], path: Path) -> None:
+    """Write label rows to a CSV file."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=LABEL_FILE_COLUMNS)
+        writer.writeheader()
+        writer.writerows(rows)
+
+
+def count_states(rows: list[dict[str, str | None]]) -> dict[str, dict[str, int]]:
+    """Return {finding_id: {state: count}}. Counts only, safe to share."""
+    counts: dict[str, dict[str, int]] = {}
+    for row in rows:
+        per_finding = counts.setdefault(str(row["finding_id"]), {})
+        state = str(row["state"])
+        per_finding[state] = per_finding.get(state, 0) + 1
+    return counts
+
+
+def load_study_labels(path: Path, dataset_id: str | None, origin: str = "dataset") -> list:
+    """Read a built labels CSV and return StudyLabels records (contract 02)."""
+    from kneescope_contracts.models import DatasetLabel, StudyLabels
+
+    grouped: dict[str, list[DatasetLabel]] = {}
+    with path.open(newline="", encoding="utf-8") as handle:
+        for row in csv.DictReader(handle):
+            if row["state"] not in LABEL_STATES:
+                raise ValueError(f"invalid label state {row['state']!r}")
+            grouped.setdefault(row["study_id"], []).append(
+                DatasetLabel(
+                    finding_id=row["finding_id"],
+                    state=row["state"],
+                    provenance=row["provenance"],
+                    source_ref=row["source_ref"] or None,
+                )
+            )
+    return [
+        StudyLabels(study_id=study_id, dataset_id=dataset_id, origin=origin, labels=labels)
+        for study_id, labels in grouped.items()
+    ]
