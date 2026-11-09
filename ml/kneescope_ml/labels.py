@@ -10,6 +10,8 @@ import csv
 import json
 from pathlib import Path
 
+from kneescope_contracts.models import DataOrigin, DatasetLabel, LabelProvenance, LabelState, StudyLabels
+
 LABEL_STATES = ("positive", "negative", "unknown", "not_labeled")
 
 
@@ -125,10 +127,10 @@ def count_states(rows: list[dict[str, str | None]]) -> dict[str, dict[str, int]]
     return counts
 
 
-def load_study_labels(path: Path, dataset_id: str | None, origin: str = "dataset") -> list:
+def load_study_labels(
+    path: Path, dataset_id: str | None, origin: str = "dataset"
+) -> list[StudyLabels]:
     """Read a built labels CSV and return StudyLabels records (contract 02)."""
-    from kneescope_contracts.models import DatasetLabel, StudyLabels
-
     grouped: dict[str, list[DatasetLabel]] = {}
     with path.open(newline="", encoding="utf-8") as handle:
         for row in csv.DictReader(handle):
@@ -137,12 +139,17 @@ def load_study_labels(path: Path, dataset_id: str | None, origin: str = "dataset
             grouped.setdefault(row["study_id"], []).append(
                 DatasetLabel(
                     finding_id=row["finding_id"],
-                    state=row["state"],
-                    provenance=row["provenance"],
+                    state=LabelState(row["state"]),
+                    provenance=LabelProvenance(row["provenance"]),
                     source_ref=row["source_ref"] or None,
                 )
             )
     return [
-        StudyLabels(study_id=study_id, dataset_id=dataset_id, origin=origin, labels=labels)
+        StudyLabels(
+            study_id=study_id,
+            dataset_id=dataset_id,
+            origin=DataOrigin(origin),
+            labels=labels,
+        )
         for study_id, labels in grouped.items()
     ]
