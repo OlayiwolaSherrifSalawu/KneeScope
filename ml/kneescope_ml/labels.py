@@ -127,9 +127,7 @@ def count_states(rows: list[dict[str, str | None]]) -> dict[str, dict[str, int]]
     return counts
 
 
-def load_study_labels(
-    path: Path, dataset_id: str | None, origin: str = "dataset"
-) -> list[StudyLabels]:
+def load_study_labels(path: Path, dataset_id: str | None, origin: str = "dataset") -> list[StudyLabels]:
     """Read a built labels CSV and return StudyLabels records (contract 02)."""
     grouped: dict[str, list[DatasetLabel]] = {}
     with path.open(newline="", encoding="utf-8") as handle:
